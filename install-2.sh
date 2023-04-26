@@ -119,5 +119,5 @@ if [[ $ADDM == "Y" || $ADDM == "y" ]]; then
     sleep 1
 fi
 
-echo -e "\n$COK Has been completed. >>>>>>>>>>>>>>>>>  === Check fstab, df, lsblk ===  \n"
+echo -e "\n$COK Has been completed. >>>>>>>>>>>>>>>>>  Check fstab, df, lsblk \n"
 

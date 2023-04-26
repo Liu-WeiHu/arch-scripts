@@ -111,4 +111,4 @@ echo -e "\n$CNT starting auto network ...................\n"
 systemctl enable NetworkManager
 sleep 1
 
-echo -e "\n$COK Has been completed. Please exec >>>>>>>>>>>>>>>>>>>>>>>>>  exit -> umount -R /mnt -> reboot \n"
+echo -e "\n$COK Has been completed. Please exec >>>>>>>>>>>>>>>>>>>>>>>>>  exit, umount -R /mnt, reboot \n"
