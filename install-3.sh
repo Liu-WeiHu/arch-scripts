@@ -49,6 +49,9 @@ set completion-ignore-case on
 set show-all-if-ambiguous on
 EOF
 sleep 1
+git config --global user.name "Liu WeiHu"
+git config --global user.email 6460176@qq.com
+sleep 1
 
 echo -e "\n$CWR after 5s reboot ...................\n"
 sleep 5
