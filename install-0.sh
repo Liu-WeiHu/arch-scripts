@@ -11,9 +11,7 @@ CAC="[\e[1;33mACTION\e[0m]"
 # cfdisk -> /boot 512M,
 
 # mkfs
-echo -e "\n\n"
-echo -e "$CNT starting mkfs ..."
-echo -e "\n\n"
+echo -e "\n$CNT starting mkfs ..................\n"
 sleep 1
 mkfs.fat -F32 /dev/nvme0n1p1
 sleep 1
@@ -21,11 +19,10 @@ mkfs.btrfs -f /dev/nvme0n1p2
 sleep 1
 mkfs.btrfs -f /dev/sda1
 sleep 1
+echo -e "\n$CAC mkfs done .................\n"
 
 # mount
-echo -e "\n\n"
-echo -e "$CNT starting mount ..."
-echo -e "\n\n"
+echo -e "\n$CNT starting create subvolume .................\n"
 sleep 1
 mount /dev/nvme0n1p2 /mnt
 sleep 1
@@ -46,9 +43,9 @@ sleep 1
 cd ~
 sleep 1
 umount /mnt
-echo -e "\n\n"
-echo -e "$CNT btrfs created ..."
-echo -e "\n\n"
+echo -e "\n$CAC created subvolume done .................\n"
+
+echo -e "\n$CNT starting mount ......................\n"
 sleep 1
 mount -o noatime,ssd,compress=zstd,nodiscard,subvol=@root  /dev/nvme0n1p2  /mnt
 sleep 1
@@ -71,9 +68,7 @@ sleep 1
 mount -o noatime,ssd,compress=zstd,nodiscard,subvol=@libvirt  /dev/nvme0n1p2  /mnt/var/lib/libvirt
 sleep 1
 
-echo -e "\n\n"
-echo -e "$COK mount success......."
-echo -e "\n\n"
+echo -e "\n$CAC mount done .................\n"
 
 lsblk
 
@@ -81,32 +76,32 @@ sleep 5
 
 
 # disable reflector
-echo -e "\n\n"
-pacman -Rsnu reflector
+echo -e "\n$CNT uninstall reflector .....................\n"
+pacman -Rsnu reflector --noconfirm
+echo -e "\n$CAC uninstall reflector done .................\n"
 sleep 1
 
+echo -e "\n$CNT fix mirrorlist ......................\n"
 cat > /etc/pacman.d/mirrorlist << EOF
 Server=https://mirrors.ustc.edu.cn/archlinux/\$repo/os/\$arch
 Server=https://mirrors.tuna.tsinghua.edu.cn/archlinux/\$repo/os/\$arch
 EOF
 
+echo -e "\n$CAC created subvolume done .................\n"
 sleep 1
 
 # install system
-echo -e "\n\n"
-echo -e "$CNT startings install system ..."
-echo -e "\n\n"
+echo -e "\n$CNT startings install system .......................\n"
 sleep 1
-pacstrap /mnt base base-devel linux linux-firmware btrfs-progs neovim networkmanager
+pacstrap /mnt base base-devel linux linux-firmware btrfs-progs neovim networkmanager git
+echo -e "\n$CAC install system done .................\n"
 sleep 1
 
 # gen fstab
-echo -e "\n\n"
-echo -e "$CNT generator fstab  ..."
-echo -e "\n\n"
+echo -e "\n$CNT generator fstab  ...................\n"
 genfstab -U /mnt > /mnt/etc/fstab
+echo -e "\n$CAC gen fstab done .................\n"
 sleep 1
 
 # chroot /mnt
-echo -e "\n\n"
-echo -e "$COK Has been completed. Please >>>>>>>>>>>>>>>> arch-chroot /mnt"
+echo -e "\n$COK Has been completed. Please >>>>>>>>>>>>>>>> arch-chroot /mnt \n"
