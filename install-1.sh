@@ -83,7 +83,7 @@ echo -e "\n\n"
 pacman -Rsnu reflector
 sleep 1
 
-cat > mirrorlist << EOF
+cat > /etc/pacman.d/mirrorlist << EOF
 Server=https://mirrors.ustc.edu.cn/archlinux/\$repo/os/\$arch
 Server=https://mirrors.tuna.tsinghua.edu.cn/archlinux/\$repo/os/\$arch
 EOF
