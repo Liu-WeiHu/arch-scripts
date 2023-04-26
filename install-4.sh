@@ -109,6 +109,8 @@ sudo systemctl enable --now libvirtd.service
 sleep 1
 sed -i '/PS1=/d' ~/.bashrc
 sleep 1
+mkdir ~/Documents/go
+sleep 1
 cat << EOF >> ~/.bashrc
 parse_git_branch() {
      # git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1 )/'
