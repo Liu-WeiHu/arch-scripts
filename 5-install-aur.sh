@@ -71,6 +71,19 @@ EOF'
 sleep 2
 fi
 
+# chrome gpu ++
+echo -e "$CAT config chrome gpu ++ ......................................"
+cat << EOF >> ~/.config/chrome-flags.conf
+--ignore-gpu-blocklist
+--enable-gpu-rasterization
+--enable-zero-copy
+--enable-features=VaapiVideoEncoder,VaapiVideoDecoder
+--enable-oop-rasterization
+--enable-raw-draw
+--use-vulkan
+EOF
+sleep 2
+
 echo -e "\n$COK ============================================\n"
 
 

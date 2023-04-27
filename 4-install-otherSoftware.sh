@@ -143,6 +143,8 @@ EOF'
 sleep 2
 sudo systemctl enable --now libvirtd.service
 sleep 2
+sudo virsh net-autostart default
+sleep 2
 
 # setup v2raya
 echo -e "\n$CNT starting setup v2raya ........................"

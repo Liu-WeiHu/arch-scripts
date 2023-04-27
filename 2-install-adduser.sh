@@ -103,7 +103,7 @@ sleep 2
 # add intel Installing a video card
 echo -e "\n$CNT starting Installing a video card ...................."
 sleep 2
-pacman -S mesa libva-utils intel-media-driver
+pacman -S mesa libva-utils intel-media-driver vulkan-intel  vulkan-icd-loader
 echo -e "\n$CAC video card done ..................."
 sleep 2
 
