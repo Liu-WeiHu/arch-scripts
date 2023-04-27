@@ -110,6 +110,8 @@ sleep 2
 echo -e "\n$CNT starting config rust ........................"
 rustup default stable
 sleep 5
+mkdir ~/.cargo
+sleep 2
 cat << EOF > ~/.cargo/config
 [source.crates-io]
 # To use sparse index, change 'rsproxy' to 'rsproxy-sparse'
