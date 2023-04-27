@@ -8,38 +8,35 @@ CAT="[\e[1;37mATTENTION\e[0m]"
 CWR="[\e[1;35mWARNING\e[0m]"
 CAC="[\e[1;33mACTION\e[0m]"
 
-echo -e "\n$CNT install spectacle kate ...........................\n"
-paru -S spectacle kate
-sleep 2
-echo -e "\n$CNT install gwenview qt5-imageformats  kimageformats ...........................\n"
+echo -e "\n$CNT install gwenview qt5-imageformats  kimageformats ............................"
 paru -S gwenview qt5-imageformats  kimageformats
 sleep 2
-echo -e "\n$CNT install dolphin ffmpegthumbs  kdegraphics-thumbnailers 	dolphin-plugins ...........................\n"
+echo -e "\n$CNT install dolphin ffmpegthumbs  kdegraphics-thumbnailers 	dolphin-plugins ............................"
 paru -S dolphin ffmpegthumbs  kdegraphics-thumbnailers 	dolphin-plugins
 sleep 2
-echo -e "\n$CNT install ark p7zip unrar unarchiver ...........................\n"
+echo -e "\n$CNT install ark p7zip unrar unarchiver ............................"
 paru -S ark p7zip unrar unarchiver
 sleep 2
-echo -e "\n$CNT install kdeconnect sshfs  python-nautilus ...........................\n"
+echo -e "\n$CNT install kdeconnect sshfs  python-nautilus ............................"
 paru -S kdeconnect sshfs  python-nautilus
 sleep 2
-echo -e "\n$CNT install v2ray v2raya docker docker-compose google-chrome ...........................\n"
-paru -S v2ray v2raya docker docker-compose google-chrome
+echo -e "\n$CNT install v2ray v2raya docker docker-compose google-chrome kate ............................"
+paru -S v2ray v2raya docker docker-compose google-chrome kate
 sleep 2
-echo -e "\n$CNT install goland goland-jre ...........................\n"
+echo -e "\n$CNT install goland goland-jre ............................"
 paru -S goland goland-jre go rustup
 sleep 2
-echo -e "\n$CNT install virt-manager qemu-desktop dnsmasq iptables-nft samba ...........................\n"
+echo -e "\n$CNT install virt-manager qemu-desktop dnsmasq iptables-nft samba ............................"
 paru -S virt-manager qemu-desktop dnsmasq iptables-nft samba
 sleep 2
-echo -e "\n$CAC desktop done .................\n"
+echo -e "\n$CAC desktop done .................."
 sleep 2
 
 # user-dirs config
-echo -e "\n$CNT starting config off user-dirs ...........................\n"
+echo -e "\n$CNT starting config off user-dirs ............................"
 sudo sed -i 's/enabled=True/enabled=False/' /etc/xdg/user-dirs.conf
 sleep 2
-echo -e "\n$CNT starting config user-dirs.dirs .......................\n"
+echo -e "\n$CNT starting config user-dirs.dirs ........................"
 cat > ~/.config/user-dirs.dirs  << EOF
 XDG_DESKTOP_DIR="\$HOME/Desktop"
 XDG_DOCUMENTS_DIR="\$HOME/Documents"
@@ -51,7 +48,7 @@ XDG_TEMPLATES_DIR="\$HOME/Code"
 XDG_VIDEOS_DIR="\$HOME/Media/Videos"
 EOF
 sleep 2
-echo -e "\n$CNT starting config home directory .......................\n"
+echo -e "\n$CNT starting config home directory ........................"
 mkdir ~/Documents/go
 mkdir ~/{Media,Code,Shared}
 rm -rf ~/Templates/ ~/Public/
@@ -60,7 +57,7 @@ mv ~/Pictures/  ~/Music/  ~/Videos/  ~/Media/
 
 # smb config
 sleep 2
-echo -e "\n$CNT starting config smb .......................\n"
+echo -e "\n$CNT starting config smb ........................"
 sudo sh -c 'cat << EOF  > /etc/samba/smb.conf
 [Shared]
         comment = Shared Folder for QEMU
@@ -86,27 +83,12 @@ echo -e "${SMBP}\n${SMBP}" | sudo smbpasswd -a $USER
 
 # docker config
 sleep 2
-echo -e "\n$CNT starting config docker .......................\n"
+echo -e "\n$CNT starting user join docker ........................"
 sudo usermod -aG docker $USER
-newgrp docker
 sleep 2
-sudo systemctl enable --now docker
-sleep 2
-sudo mkdir /etc/docker
-sleep 2
-sudo sh -c 'cat << EOF > /etc/docker/daemon.json
-{
-  "storage-driver": "btrfs"
-}
-EOF'
-sleep 2
-sudo systemctl restart docker
-sleep 2
-docker info | grep Storage
-sleep 5
 
 # bash config
-echo -e "\n$CNT starting config bash .......................\n"
+echo -e "\n$CNT starting config bash ......................."
 sed -i '/PS1=/d' ~/.bashrc
 sleep 2
 cat << EOF >> ~/.bashrc
@@ -125,7 +107,7 @@ source ~/.bashrc
 
 # rust config
 sleep 2
-echo -e "\n$CNT starting config rust .......................\n"
+echo -e "\n$CNT starting config rust ........................"
 rustup default stable
 sleep 5
 cat << EOF > ~/.cargo/config
@@ -147,7 +129,7 @@ EOF
 
 # libvirt config
 sleep 2
-echo -e "\n$CNT starting config libvirt .......................\n"
+echo -e "\n$CNT starting config libvirt ........................"
 sudo usermod -a -G libvirt $USER
 sudo sh -c 'cat << EOF  > /etc/polkit-1/rules.d/80-libvirt.rules
 polkit.addRule(function(action, subject) {
@@ -161,49 +143,14 @@ sudo systemctl enable --now libvirtd.service
 sleep 2
 
 # setup v2raya
-echo -e "\n$CNT starting setup v2raya .......................\n"
+echo -e "\n$CNT starting setup v2raya ........................"
 sudo systemctl enable --now v2raya
 sleep 2
 
 # setup blue
-echo -e "\n$CNT starting setup blue .......................\n"
+echo -e "\n$CNT starting setup blue ........................"
 sudo systemctl enable --now bluetooth
 sleep 2
-
-# aur install
-paru -S linuxqq visual-studio-code-bin dbeaver-ee
-sleep 2
-
-# setup wayland config
-read -rep $'[\e[1;37mATTENTION\e[0m] - Are you setup wayland config? (y,n) ' WAYLANDC
-if [[ $WAYLANDC == "Y" || $WAYLANDC == "y" ]]; then
-    echo -e "$CNT - Setup starting config chrome wayland .................\n"
-    echo "--gtk-version=4" >  ~/.config/chrome-flags.conf
-    sleep 2
-    echo -e "$CNT - Setup starting config code wayland .................\n"
-    cat << EOF > ~/.config/code-flags.conf
---ozone-platform=wayland
---enable-wayland-ime
-EOF
-    sleep 2
-    echo -e "$CNT - Setup starting config qq wayland .................\n"
-    sudo sed -i '/Exec=linuxqq/c\Exec=linuxqq --ozone-platform=wayland --enable-wayland-ime %U' /usr/share/applications/qq.desktop
-    sleep 2
-    echo "\n$CWR 设置 -> 输入设备 -> 虚拟键盘 fcitx5 选中\n"
-    sleep 2
-    echo -e "$CNT - Setup starting config electron wayland .................\n"
-    cat << EOF > ~/.config/electron-flags.conf
---enable-features=WaylandWindowDecorations
---ozone-platform-hint=auto
---enable-webrtc-pipewire-capturer
---gtk-version=4
-EOF
-    sleep 2
-    echo -e "$CNT - Setup starting config java wayland .................\n"
-    mkdir ~/.config/environment.d
-    echo "_JAVA_AWT_WM_NONREPARENTING=1" > ~/.config/environment.d/env.conf
-    sleep 2
-fi
 
 echo -e "\n$COK ============================================\n"
 

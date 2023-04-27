@@ -8,8 +8,19 @@ CAT="[\e[1;37mATTENTION\e[0m]"
 CWR="[\e[1;35mWARNING\e[0m]"
 CAC="[\e[1;33mACTION\e[0m]"
 
+# check network
+ping -c 3 www.baidu.com > /dev/null
+if [ $? -eq 0 ]; then
+    echo -e "\n$COK network connected..................."
+else
+    echo -e "\n$CER network not connected, You must connect network ......."
+    exit 1
+fi
+sleep 1
+
+
 # set pacman
-echo -e "\n$CNT edit pacman.conf .................\n"
+echo -e "\n$CNT edit pacman.conf ..................."
 sleep 2
 sed -i 's/#Color/Color/' /etc/pacman.conf
 sleep 2
@@ -22,19 +33,19 @@ sleep 2
 pacman -Sy
 sleep 2
 pacman -S archlinuxcn-keyring
-echo -e "\n$CAC archlinuxcn done .................\n"
+echo -e "\n$CAC archlinuxcn done ..................."
 sleep 2
 
 # if install keyring ERROR
 read -rep $'[\e[1;37mATTENTION\e[0m] - Is it successful to install ArchlinuxCn Key? (y,n) ' KEY
 if [[ $KEY == "N" || $KEY == "n" ]]; then
-    echo -e "$CNT - Setup starting install archlinuxcn .................\n"
+    echo -e "$CNT - Setup starting install archlinuxcn ..................."
     rm -rf /etc/pacman.d/gnupg
     sleep 2
     pacman-key --init
     sleep 2
     pacman-key --populate archlinux archlinuxcn
-    echo -e "\n$CAC archlinuxcn done .................\n"
+    echo -e "\n$CAC archlinuxcn done ..................."
     sleep 2
 fi
 
@@ -44,30 +55,30 @@ sleep 2
 pacman -S paru
 sleep 2
 sed -i 's/#BottomUp/BottomUp/' /etc/paru.conf
-echo -e "\n$CAC paru conf done .................\n"
+echo -e "\n$CAC paru conf done ..................."
 sleep 2
 
 # add user
-echo -e "\n$CNT add user ..........................\n."
+echo -e "\n$CNT add user ............................."
 sleep 2
-read -rep $'[\e[1;37mATTENTION\e[0m] - Please enter the user name: ' USER
-useradd -m -G wheel $USER
+read -rep $'[\e[1;37mATTENTION\e[0m] - Please enter the user name: ' UUSER
+useradd -m -G wheel $UUSER
 read -rep $'[\e[1;37mATTENTION\e[0m] - Please enter the user password: ' PASSWD
-echo -e "${PASSWD}\n${PASSWD}" | passwd $USER
+echo -e "${PASSWD}\n${PASSWD}" | passwd $UUSER
 sed -i 's/^# %wheel ALL=/%wheel ALL=/g' /etc/sudoers
-echo -e "\n$CAC user done .................\n"
+echo -e "\n$CAC user done ..................."
 sleep 2
 
 # add fonts
-echo -e "\n$CNT install fonts ........................\n"
+echo -e "\n$CNT install fonts .........................."
 pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-lxgw-wenkai-mono ttf-lxgw-wenkai
-echo -e "\n$CAC fonts done .................\n"
+echo -e "\n$CAC fonts done ..................."
 sleep 2
 
 # add zram
 read -rep $'[\e[1;37mATTENTION\e[0m] - Do you install zram? (y,n) ' ZRAM
 if [[ $ZRAM == "Y" || $ZRAM == "y" ]]; then
-    echo -e "$CNT - Setup starting install zram ................\n"
+    echo -e "$CNT - Setup starting install zram .................."
     pacman -S zram-generator
     sleep 2
     cat > zram-generator.conf << EOF
@@ -78,26 +89,26 @@ EOF
     systemctl daemon-reload
     sleep 2
     systemctl start /dev/nvme0n1p2
-    echo -e "\n$CAC zram done .................\n"
+    echo -e "\n$CAC zram done ..................."
     sleep 2
 fi
 
 # add pipewire
-echo -e "\n$CNT install pipewire .....................\n"
+echo -e "\n$CNT install pipewire ......................."
 sleep 2
 pacman -S pipewire wireplumber pipewire-pulse
-echo -e "\n$CAC pipewire done .................\n"
+echo -e "\n$CAC pipewire done ..................."
 sleep 2
 
 # add intel Installing a video card
-echo -e "\n$CNT starting Installing a video card ..................\n"
+echo -e "\n$CNT starting Installing a video card ...................."
 sleep 2
 pacman -S mesa libva-utils intel-media-driver
-echo -e "\n$CAC video card done .................\n"
+echo -e "\n$CAC video card done ..................."
 sleep 2
 
 # add fcitx5
-echo -e "\n$CNT install fcitx5 .......................\n"
+echo -e "\n$CNT install fcitx5 ........................."
 sleep 2
 pacman -S fcitx5-im fcitx5-chinese-addons fcitx5-pinyin-zhwiki
 sleep 2
@@ -106,21 +117,24 @@ GTK_IM_MODULE=fcitx
 QT_IM_MODULE=fcitx
 XMODIFIERS=@im=fcitx
 EOF
-echo -e "\n$CAC fcitx5 done .................\n"
+echo -e "\n$CAC fcitx5 done ..................."
 sleep 2
 
 # add mount
 echo -e "\n\n"
 read -rep $'[\e[1;37mATTENTION\e[0m] - Do you add mount /dev/sda1 > /dev/nvme0n1p2 ? (y,n) ' ADDM
 if [[ $ADDM == "Y" || $ADDM == "y" ]]; then
-    echo -e "$CNT - Setup starting add mount ..................\n"
+    echo -e "$CNT - Setup starting add mount ...................."
     btrfs device add -f /dev/sda1 /
-    echo -e "\n$CAC mount done .................\n"
+    echo -e "\n$CAC mount done ..................."
     sleep 2
 fi
 
-sudo sed -i 's/subvolid=[0-9]\{3\}/nodiscard/g' /etc/fstab
+sed -i 's/subvolid=[0-9]\{3\}/nodiscard/g' /etc/fstab
 sleep 2
+
+# mv script to home
+mv ~/arch-scripts /home/$UUSER/
 
 echo -e "\n$COK Has been completed. >>>>>>>>>>>>>>>>>  Check fstab, df, lsblk \n"
 
