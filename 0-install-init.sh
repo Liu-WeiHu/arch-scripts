@@ -50,7 +50,7 @@ echo -e "\n$CAC created subvolume done ...................."
 echo -e "\n$CNT starting mount ........................."
 sleep 2
 mount -o noatime,ssd,compress=zstd,nodiscard,subvol=@root  /dev/nvme0n1p2  /mnt
-echo -e "\n$CAC root done ...................."
+echo -e "\n$CAC root mounted done ...................."
 sleep 2
 mkdir /mnt/{boot,home,var}
 sleep 2
@@ -59,22 +59,22 @@ sleep 2
 mkdir /mnt/var/lib/{docker,libvirt}
 sleep 2
 mount /dev/nvme0n1p1 /mnt/boot
-echo -e "\n$CAC boot done ...................."
+echo -e "\n$CAC boot mounted done ...................."
 sleep 2
 mount -o noatime,ssd,compress=zstd,nodiscard,subvol=@home  /dev/nvme0n1p2  /mnt/home
-echo -e "\n$CAC home done ...................."
+echo -e "\n$CAC home mounted done ...................."
 sleep 2
 mount -o noatime,ssd,compress=zstd,nodiscard,subvol=@cache  /dev/nvme0n1p2  /mnt/var/cache
-echo -e "\n$CAC cache done ...................."
+echo -e "\n$CAC cache mounted done ...................."
 sleep 2
 mount -o noatime,ssd,compress=zstd,nodiscard,subvol=@log  /dev/nvme0n1p2  /mnt/var/log
-echo -e "\n$CAC log done ...................."
+echo -e "\n$CAC log mounted done ...................."
 sleep 2
 mount -o noatime,ssd,compress=zstd,nodiscard,subvol=@docker  /dev/nvme0n1p2  /mnt/var/lib/docker
-echo -e "\n$CAC docker done ...................."
+echo -e "\n$CAC docker mounted done ...................."
 sleep 2
 mount -o noatime,ssd,compress=zstd,nodiscard,subvol=@libvirt  /dev/nvme0n1p2  /mnt/var/lib/libvirt
-echo -e "\n$CAC libvirt done ...................."
+echo -e "\n$CAC libvirt mounted done ...................."
 sleep 2
 
 lsblk
@@ -109,6 +109,9 @@ echo -e "\n$CNT generator fstab  ......................"
 genfstab -U /mnt > /mnt/etc/fstab
 echo -e "\n$CAC gen fstab done ...................."
 sleep 2
+
+# mv script
+mv arch-scripts /mnt/root/
 
 # chroot /mnt
 echo -e "\n$COK Has been completed. Please >>>>>>>>>>>>>>>> arch-chroot /mnt \n"

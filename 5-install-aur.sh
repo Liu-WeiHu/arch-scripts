@@ -72,7 +72,7 @@ sleep 2
 fi
 
 # chrome gpu ++
-echo -e "$CAT config chrome gpu ++ ......................................"
+echo -e "$CAC config chrome gpu ++ ......................................"
 cat << EOF >> ~/.config/chrome-flags.conf
 --ignore-gpu-blocklist
 --enable-gpu-rasterization

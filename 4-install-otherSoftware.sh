@@ -12,7 +12,7 @@ echo -e "\n$CNT install gwenview qt5-imageformats  kimageformats ...............
 paru -S gwenview qt5-imageformats  kimageformats
 sleep 2
 echo -e "\n$CNT install dolphin ffmpegthumbs  kdegraphics-thumbnailers 	dolphin-plugins ............................"
-paru -S dolphin ffmpegthumbs  kdegraphics-thumbnailers 	dolphin-plugins
+paru -S dolphin ffmpegthumbs  kdegraphics-thumbnailers 	dolphin-plugins --needed
 sleep 2
 echo -e "\n$CNT install ark p7zip unrar unarchiver ............................"
 paru -S ark p7zip unrar unarchiver
