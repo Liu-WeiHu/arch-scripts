@@ -22,7 +22,7 @@ if [[ $WAYLAND == "Y" || $WAYLAND == "y" ]]; then
     echo -e "\n$CAC wayland done ..................."
 else
     echo -e "$CNT - Setup starting install x11 ..................."
-    paru -S sddm xclip xsel flameshot
+    paru -S sddm xclip xsel flameshot --needed
     echo -e "\n$CAC x11 done ..................."
 fi
 sleep 2
