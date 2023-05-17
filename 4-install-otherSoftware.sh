@@ -185,6 +185,7 @@ else
   xrandr --output "\$intern" --auto
 fi
 EOF'
+sleep 2
     echo -e "\n$CAC xrandr done ..................."
 fi
 sleep 2
