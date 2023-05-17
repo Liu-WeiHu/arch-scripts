@@ -156,9 +156,37 @@ echo -e "\n$CNT starting setup blue ........................"
 sudo systemctl enable --now bluetooth
 sleep 2
 
+# setup paccache
+echo -e "\n$CNT starting setup paccache ........................"
+sudo systemctl enable paccache.timer
+sleep 2
+
+# setup xrandr
+read -rep $'[\e[1;37mATTENTION\e[0m] - Are you install xrandr and configure it? (y,n) ' XRANDR
+if [[ $XRANDR == "Y" || $XRANDR == "y" ]]; then
+    echo -e "$CNT - Setup starting install xrandr and configure ..................."
+    paru -S xorg-xrandr
+    sleep 2
+sudo sh -c 'cat << EOF >> /usr/share/sddm/scripts/Xsetup
+intern=eDP-1
+extern1=DP-1-1
+extern2=DP-1-2
+xrandr=\$(xrandr)
+output=
+if [[ "\$xrandr" =~ "\$extern1 connected" ]]; then
+  output=\$extern1
+elif [[ "\$xrandr" =~ "\$extern2 connected" ]]; then
+  output=\$extern2
+fi
+
+if [[ -n "\$output" ]]; then
+  xrandr --output "\$intern" --off --output "\$output" --auto
+else
+  xrandr --output "\$intern" --auto
+fi
+EOF'
+    echo -e "\n$CAC xrandr done ..................."
+fi
+sleep 2
+
 echo -e "\n$COK ============================================\n"
-
-
-
-
-
