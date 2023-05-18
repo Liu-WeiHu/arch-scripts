@@ -17,9 +17,6 @@ sleep 2
 echo -e "\n$CNT install ark p7zip unrar unarchiver ............................"
 paru -S ark p7zip unrar unarchiver
 sleep 2
-echo -e "\n$CNT install kdeconnect sshfs  python-nautilus ............................"
-paru -S kdeconnect sshfs  python-nautilus
-sleep 2
 echo -e "\n$CNT install v2ray v2raya docker docker-compose google-chrome kate ............................"
 paru -S v2ray v2raya docker docker-compose google-chrome kate
 sleep 2
@@ -31,6 +28,24 @@ paru -S virt-manager qemu-desktop dnsmasq iptables-nft samba
 sleep 2
 echo -e "\n$CAC desktop done .................."
 sleep 2
+
+# kdeconnect install
+read -rep $'[\e[1;37mATTENTION\e[0m] - Are you install kdeconnect ? (y,n) ' KDECONNECT
+if [[ $KDECONNECT == "Y" || $KDECONNECT == "y" ]]; then
+    echo -e "$CNT - Setup starting install kdeconnect sshfs  python-nautilus ..................."
+    paru -S kdeconnect sshfs  python-nautilus
+sleep 2
+    echo -e "\n$CAC kdeconnect done ..................."
+fi
+
+# screenkey install
+read -rep $'[\e[1;37mATTENTION\e[0m] - Are you install screenkey ? (y,n) ' SCREENKEY
+if [[ $SCREENKEY == "Y" || $SCREENKEY == "y" ]]; then
+    echo -e "$CNT - Setup starting install screenkey ..................."
+    paru -S screenkey
+sleep 2
+    echo -e "\n$CAC screenkey done ..................."
+fi
 
 # user-dirs config
 echo -e "\n$CNT starting config off user-dirs ............................"
