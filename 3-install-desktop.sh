@@ -10,14 +10,14 @@ CAC="[\e[1;33mACTION\e[0m]"
 
 # install desktop
 echo -e "\n$CNT install plasma-meta yakuake ............................."
-paru -S plasma-meta yakuake kde-system-meta
+paru -S plasma-meta yakuake
 sleep 2
 
 # install wayland
 read -rep $'[\e[1;37mATTENTION\e[0m] - Are you install wayland desktop? (y,n) ' WAYLAND
 if [[ $WAYLAND == "Y" || $WAYLAND == "y" ]]; then
     echo -e "$CNT - Setup starting install wayland ..................."
-    paru -S sddm-git plasma-wayland-session  xdg-desktop-portal  xdg-desktop-portal-gtk xorg-xeyes wl-clipboard spectacle plasma-wayland-protocols
+    paru -S sddm-git plasma-wayland-session  xdg-desktop-portal xorg-xeyes wl-clipboard spectacle plasma-wayland-protocols
     sleep 2
     echo -e "\n$CAC wayland done ..................."
 else
