@@ -87,9 +87,12 @@ cat << EOF >> ~/.config/chrome-flags.conf
 EOF
 sleep 2
 
+# configure qemu
+echo -e "$CWR you can configure qemu use hugepages........................"
+echo '
+  <memoryBacking>
+    <hugepages/>
+  </memoryBacking>
+'
+
 echo -e "\n$COK ============================================\n"
-
-
-
-
-

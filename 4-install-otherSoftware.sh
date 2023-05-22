@@ -20,14 +20,35 @@ sleep 2
 echo -e "\n$CNT install v2ray v2raya docker docker-compose google-chrome kate ............................"
 paru -S v2ray v2raya docker docker-compose google-chrome kate
 sleep 2
-echo -e "\n$CNT install goland goland-jre ............................"
-paru -S goland goland-jre go rustup
-sleep 2
-echo -e "\n$CNT install virt-manager qemu-desktop dnsmasq iptables-nft samba ............................"
-paru -S virt-manager qemu-desktop dnsmasq iptables-nft samba
-sleep 2
 echo -e "\n$CAC desktop done .................."
 sleep 2
+
+# goland install
+read -rep $'[\e[1;37mATTENTION\e[0m] - Are you install goland ? (y,n) ' GOLAND
+if [[ $GOLAND == "Y" || $GOLAND == "y" ]]; then
+    echo -e "$CNT - Setup starting install goland goland-jre go rustup ..................."
+    paru -S goland goland-jre go rustup
+sleep 2
+    echo -e "\n$CAC goland done ..................."
+fi
+
+# clion install 
+read -rep $'[\e[1;37mATTENTION\e[0m] - Are you install clion ? (y,n) ' CLION
+if [[ $CLION == "Y" || $CLION == "y" ]]; then
+    echo -e "$CNT - Setup starting install goland goland-jre go rustup ..................."
+    paru -S clion clion-cmake clion-gdb clion-jre clion-lldb
+sleep 2
+    echo -e "\n$CAC clion done ..................."
+fi
+
+# kvm qemu install
+read -rep $'[\e[1;37mATTENTION\e[0m] - Are you install virt-manager qemu ? (y,n) ' QEMU
+if [[ $QEMU == "Y" || $QEMU == "y" ]]; then
+    echo -e "$CNT - Setup starting install virt-manager qemu-desktop dnsmasq iptables-nft samba ..................."
+    paru -S virt-manager qemu-desktop dnsmasq iptables-nft samba
+sleep 2
+    echo -e "\n$CAC virt-manager qemu done ..................."
+fi
 
 # kdeconnect install
 read -rep $'[\e[1;37mATTENTION\e[0m] - Are you install kdeconnect ? (y,n) ' KDECONNECT
@@ -179,9 +200,9 @@ sleep 2
 # setup xrandr
 read -rep $'[\e[1;37mATTENTION\e[0m] - Are you install xrandr and configure it? (y,n) ' XRANDR
 if [[ $XRANDR == "Y" || $XRANDR == "y" ]]; then
-    echo -e "$CNT - Setup starting install xrandr and configure ..................."
-    paru -S xorg-xrandr
-    sleep 2
+echo -e "$CNT - Setup starting install xrandr and configure ..................."
+paru -S xorg-xrandr
+sleep 2
 sudo sh -c 'cat << EOF >> /usr/share/sddm/scripts/Xsetup
 intern=eDP-1
 extern1=DP-1-1
@@ -201,8 +222,24 @@ else
 fi
 EOF'
 sleep 2
-    echo -e "\n$CAC xrandr done ..................."
+echo -e "\n$CAC xrandr done ..................."
 fi
 sleep 2
+
+# settings hugepages
+read -rep $'[\e[1;37mATTENTION\e[0m] - Are you settings hugepages ? (y,n) ' HUGEPAGES
+if [[ $HUGEPAGES == "Y" || $HUGEPAGES == "y" ]]; then
+echo -e "$CNT - Starting settings hugepages ..................."
+sudo sh -c 'cat << EOF >> /etc/fstab
+
+hugetlbfs       /dev/hugepages  hugetlbfs       mode=01770,gid=kvm        0 0
+EOF'
+sleep 2
+sudo sh -c 'echo 1100 > /proc/sys/vm/nr_hugepages'
+sleep 2
+sudo sh -c 'echo "vm.nr_hugepages = 1100" > /etc/sysctl.d/40-hugepage.conf'
+sleep 2
+echo -e "\n$CAC hugepages done ..................."
+fi
 
 echo -e "\n$COK ============================================\n"
