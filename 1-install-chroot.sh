@@ -78,16 +78,20 @@ fi
 
 # install ucode
 echo -e "\n$CNT starting install ucode ......................"
-flag=0
-while [ $flag -eq 0 ]; do
-read -rep $'[\e[1;37mATTENTION\e[0m] - Please tell me your processor manufacturer, i=intel or a=amd (i,a) ' CPU
-if [[ $CPU == "I" || $CPU == "i" ]]; then
-    pacman -S intel-ucode
-    flag=1
-elif [[ $CPU == "A" || $CPU == "a" ]]; then
-    pacman -S amd-ucode
-    flag=1
-fi
+select name in "cpu-intel" "cpu-amd"
+do
+	case $name in
+		"cpu-intel")
+			pacman -S intel-ucode
+			break
+			;;
+		"cpu-amd")
+			pacman -S amd-ucode
+			break
+			;;
+		*)
+			echo "Input error, please retype"
+	esac
 done
 echo -e "\n$CAC ucode done ..................."
 sleep 2

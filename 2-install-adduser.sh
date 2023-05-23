@@ -81,7 +81,7 @@ if [[ $ZRAM == "Y" || $ZRAM == "y" ]]; then
     echo -e "$CNT - Setup starting install zram .................."
     pacman -S zram-generator
     sleep 2
-    cat > zram-generator.conf << EOF
+    cat > /etc/systemd/zram-generator.conf << EOF
 [zram0]
 zram-size = ram / 2
 EOF
