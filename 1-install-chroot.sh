@@ -98,7 +98,7 @@ pacman -S grub efibootmgr
 sleep 2
 sed -i '/GRUB_CMDLINE_LINUX_DEFAULT=/c\GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"' /etc/default/grub
 sed -i '/GRUB_PRELOAD_MODULES=/s/.$/ btrfs&/' /etc/default/grub
-grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Arch
+grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=Arch
 sleep 2
 grub-mkconfig -o /boot/grub/grub.cfg
 echo -e "\n$CAC grub done ..................."

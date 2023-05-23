@@ -8,7 +8,7 @@ CAT="[\e[1;37mATTENTION\e[0m]"
 CWR="[\e[1;35mWARNING\e[0m]"
 CAC="[\e[1;33mACTION\e[0m]"
 
-# cfdisk -> /boot 512M,
+# cfdisk -> /efi 100M,
 
 # setting timedate
 timedatectl set-ntp true
@@ -58,14 +58,14 @@ sleep 2
 mount -o noatime,ssd,compress=zstd,nodiscard,subvol=@root  /dev/nvme0n1p2  /mnt
 echo -e "\n$CAC root mounted done ...................."
 sleep 2
-mkdir /mnt/{boot,home,var}
+mkdir /mnt/{efi,home,var}
 sleep 2
 mkdir /mnt/var/{cache,log,lib}
 sleep 2
 mkdir /mnt/var/lib/{docker,libvirt}
 sleep 2
-mount /dev/nvme0n1p1 /mnt/boot
-echo -e "\n$CAC boot mounted done ...................."
+mount /dev/nvme0n1p1 /mnt/efi
+echo -e "\n$CAC efi mounted done ...................."
 sleep 2
 mount -o noatime,ssd,compress=zstd,nodiscard,subvol=@home  /dev/nvme0n1p2  /mnt/home
 echo -e "\n$CAC home mounted done ...................."
