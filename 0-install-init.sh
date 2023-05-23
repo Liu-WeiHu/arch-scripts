@@ -10,6 +10,12 @@ CAC="[\e[1;33mACTION\e[0m]"
 
 # cfdisk -> /boot 512M,
 
+# setting timedate
+timedatectl set-ntp true
+sleep 2
+timedatectl set-timezone Asia/Shanghai
+sleep 2
+
 # mkfs
 echo -e "\n$CNT starting mkfs ....................."
 sleep 2

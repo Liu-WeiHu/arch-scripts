@@ -17,8 +17,8 @@ sleep 2
 echo -e "\n$CNT install ark p7zip unrar unarchiver ............................"
 paru -S ark p7zip unrar unarchiver
 sleep 2
-echo -e "\n$CNT install v2ray v2raya docker docker-compose google-chrome kate ............................"
-paru -S v2ray v2raya docker docker-compose google-chrome kate
+echo -e "\n$CNT install v2ray v2raya docker docker-compose google-chrome-dev kate ............................"
+paru -S v2ray v2raya docker docker-compose google-chrome-dev kate
 sleep 2
 echo -e "\n$CAC desktop done .................."
 sleep 2

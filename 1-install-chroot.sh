@@ -16,7 +16,7 @@ sleep 2
 # set time zone
 echo -e "\n$CNT Setting Zone Time ................."
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-hwclock --systohc --localtime
+hwclock --systohc
 echo -e "\n$CAC zone time done ..................."
 sleep 2
 
