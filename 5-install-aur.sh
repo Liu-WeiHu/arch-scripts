@@ -42,9 +42,6 @@ if [[ $WAYLANDC == "Y" || $WAYLANDC == "y" ]]; then
 --enable-wayland-ime
 EOF
     sleep 2
-    echo -e "$CNT - Setup starting config qq wayland .................."
-    sudo sed -i '/Exec=linuxqq/c\Exec=linuxqq --ozone-platform=wayland --enable-wayland-ime %U' /usr/share/applications/qq.desktop
-    sleep 2
     echo -e "\n$CWR 设置 -> 输入设备 -> 虚拟键盘 fcitx5 选中\n"
     sleep 2
     echo -e "$CNT - Setup starting config electron wayland .................."

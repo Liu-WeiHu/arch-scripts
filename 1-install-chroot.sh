@@ -77,7 +77,7 @@ if [[ $FSTRIM == "Y" || $FSTRIM == "y" ]]; then
 fi
 
 # install ucode
-echo -e "\n$CNT starting install ucode ......................"
+echo -e "\n$CNT starting install ucode Please select your cpu type ......................"
 select name in "cpu-intel" "cpu-amd"
 do
 	case $name in

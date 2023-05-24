@@ -11,10 +11,13 @@ CAC="[\e[1;33mACTION\e[0m]"
 # cfdisk -> /efi 100M,
 
 # setting timedate
+echo -e "\n$CNT starting settings timedate ....................."
 timedatectl set-ntp true
 sleep 2
 timedatectl set-timezone Asia/Shanghai
+echo -e "\n$CAC timedate done ...................."
 sleep 2
+
 
 # mkfs
 echo -e "\n$CNT starting mkfs ....................."
