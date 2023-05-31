@@ -110,7 +110,7 @@ sleep 2
 # add fcitx5
 echo -e "\n$CNT install fcitx5 ........................."
 sleep 2
-pacman -S fcitx5-im fcitx5-chinese-addons fcitx5-pinyin-zhwiki
+pacman -S fcitx5-im fcitx5-chinese-addons fcitx5-pinyin-zhwiki fcitx5-pinyin-moegirl
 sleep 2
 cat >> /etc/environment << EOF
 GTK_IM_MODULE=fcitx
