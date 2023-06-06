@@ -23,6 +23,10 @@ sleep 1
 echo -e "\n$CNT edit pacman.conf ..................."
 sleep 2
 sed -i 's/#Color/Color/' /etc/pacman.conf
+sleep 1
+sed -i '/Color/a\\ILoveCandy' /etc/pacman.conf
+sleep 1
+sed -i 's/#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
 sleep 2
 cat >> /etc/pacman.conf << EOF
 [archlinuxcn]
