@@ -169,11 +169,12 @@ EOF
 sleep 2
 echo -e "\n$CNT starting config libvirt ........................"
 sudo usermod -a -G libvirt $USER
-sudo sh -c 'cat << EOF  > /etc/polkit-1/rules.d/80-libvirt.rules
+sudo sh -c 'cat << EOF  > /etc/polkit-1/rules.d/50-libvirt.rules
 polkit.addRule(function(action, subject) {
- if (action.id == "org.libvirt.unix.manage" && subject.local && subject.active && subject.isInGroup("libvirt")) {
- return polkit.Result.YES;
- }
+    if (action.id == "org.libvirt.unix.manage" &&
+        subject.isInGroup("libvirt")) {
+            return polkit.Result.YES;
+    }
 });
 EOF'
 sleep 2

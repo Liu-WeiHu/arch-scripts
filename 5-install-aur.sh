@@ -75,7 +75,7 @@ cat << EOF >> ~/.config/chrome-flags.conf
 --enable-gpu-rasterization
 --enable-zero-copy
 --disable-gpu-driver-bug-workarounds
---enable-features=VaapiVideoDecoder,VaapiVideoEncoder
+--enable-features=VaapiVideoDecoder,VaapiVideoDecodeLinuxGL,VaapiVideoEncoder
 --enable-features=VaapiIgnoreDriverCheck
 --disable-features=UseChromeOSDirectVideoDecoder
 --enable-oop-rasterization
