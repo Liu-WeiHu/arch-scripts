@@ -88,13 +88,28 @@ if [[ $ZRAM == "Y" || $ZRAM == "y" ]]; then
     cat > /etc/systemd/zram-generator.conf << EOF
 [zram0]
 zram-size = ram / 2
+compression-algorithm = zstd
+swap-priority = 100
+fs-type = swap
 EOF
-    sleep 2
-    systemctl daemon-reload
-    sleep 2
-    systemctl start /dev/nvme0n1p2
-    echo -e "\n$CAC zram done ..................."
-    sleep 2
+sleep 2
+systemctl daemon-reload
+sleep 2
+systemctl start /dev/nvme0n1p2
+# disable zswap, because kernel default enable zswap.
+sleep 2
+sed -i '/GRUB_CMDLINE_LINUX_DEFAULT=/s/.$/ zswap.enabled=0&/' /etc/default/grub
+grub-mkconfig -o /boot/grub/grub.cfg
+# Optimizing swap on zram
+touch /etc/sysctl.d/99-vm-zram-parameters.conf
+cat > /etc/sysctl.d/99-vm-zram-parameters.conf <<EOF
+vm.swappiness = 180
+vm.watermark_boost_factor = 0
+vm.watermark_scale_factor = 125
+vm.page-cluster = 0
+EOF
+echo -e "\n$CAC zram done ..................."
+sleep 2
 fi
 
 # add pipewire
