@@ -47,6 +47,55 @@ if [[ $QEMU == "Y" || $QEMU == "y" ]]; then
     echo -e "$CNT - Setup starting install virt-manager qemu-desktop dnsmasq iptables-nft samba ..................."
     paru -S virt-manager qemu-desktop dnsmasq iptables-nft samba
 sleep 2
+
+# smb config
+echo -e "\n$CNT starting config smb ........................"
+sudo sh -c 'cat << EOF  > /etc/samba/smb.conf
+[Shared]
+        comment = Shared Folder for QEMU
+        path = /home/liu/Shared
+        public = yes
+        valid users = liu
+        browseable = yes
+        writeable = yes
+        read only = no
+        security = user
+        passdb backend = tdbsam
+        force user = liu
+[global]
+        server min protocol = NT1
+        lanman auth = yes
+        ntlm auth = yes
+EOF'
+sleep 2
+sudo systemctl enable --now smb
+sleep 2
+read -rep $'[\e[1;37mATTENTION\e[0m] - Enter the smb password: ' SMBP
+echo -e "${SMBP}\n${SMBP}" | sudo smbpasswd -a $USER
+
+# libvirt config
+sleep 2
+echo -e "\n$CNT starting config libvirt ........................"
+sudo usermod -a -G libvirt $USER
+sudo sh -c 'cat << EOF  > /etc/polkit-1/rules.d/50-libvirt.rules
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.libvirt.unix.manage" &&
+        subject.isInGroup("libvirt")) {
+            return polkit.Result.YES;
+    }
+});
+EOF'
+sleep 2
+sudo systemctl enable --now libvirtd.service
+sleep 2
+sudo virsh net-autostart default
+
+# configure qemu
+sudo sed -i '/GRUB_CMDLINE_LINUX_DEFAULT=/s/.$/ intel_iommu=on iommu=pt qxl bochs_drm&/' /etc/default/grub
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+# end
+sleep 2
     echo -e "\n$CAC virt-manager qemu done ..................."
 fi
 
@@ -90,32 +139,6 @@ mkdir ~/{Media,Code,Shared}
 rm -rf ~/Templates/ ~/Public/
 sleep 2
 mv ~/Pictures/  ~/Music/  ~/Videos/  ~/Media/
-
-# smb config
-sleep 2
-echo -e "\n$CNT starting config smb ........................"
-sudo sh -c 'cat << EOF  > /etc/samba/smb.conf
-[Shared]
-        comment = Shared Folder for QEMU
-        path = /home/liu/Shared
-        public = yes
-        valid users = liu
-        browseable = yes
-        writeable = yes
-        read only = no
-        security = user
-        passdb backend = tdbsam
-        force user = liu
-[global]
-        server min protocol = NT1
-        lanman auth = yes
-        ntlm auth = yes
-EOF'
-sleep 2
-sudo systemctl enable --now smb
-sleep 2
-read -rep $'[\e[1;37mATTENTION\e[0m] - Enter the smb password: ' SMBP
-echo -e "${SMBP}\n${SMBP}" | sudo smbpasswd -a $USER
 
 # docker config
 sleep 2
@@ -164,23 +187,6 @@ index = "https://rsproxy.cn/crates.io-index"
 [net]
 git-fetch-with-cli = true
 EOF
-
-# libvirt config
-sleep 2
-echo -e "\n$CNT starting config libvirt ........................"
-sudo usermod -a -G libvirt $USER
-sudo sh -c 'cat << EOF  > /etc/polkit-1/rules.d/50-libvirt.rules
-polkit.addRule(function(action, subject) {
-    if (action.id == "org.libvirt.unix.manage" &&
-        subject.isInGroup("libvirt")) {
-            return polkit.Result.YES;
-    }
-});
-EOF'
-sleep 2
-sudo systemctl enable --now libvirtd.service
-sleep 2
-sudo virsh net-autostart default
 sleep 2
 
 # setup v2raya
