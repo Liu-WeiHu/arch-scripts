@@ -95,7 +95,7 @@ EOF
 sleep 2
 systemctl daemon-reload
 sleep 2
-systemctl start /dev/nvme0n1p2
+systemctl start /dev/sda2
 # disable zswap, because kernel default enable zswap.
 sleep 2
 sed -i '/GRUB_CMDLINE_LINUX_DEFAULT=/s/.$/ zswap.enabled=0&/' /etc/default/grub
@@ -141,7 +141,7 @@ sleep 2
 
 # add mount
 echo -e "\n\n"
-read -rep $'[\e[1;37mATTENTION\e[0m] - Do you add mount /dev/sda1 > /dev/nvme0n1p2 ? (y,n) ' ADDM
+read -rep $'[\e[1;37mATTENTION\e[0m] - Do you add mount /dev/sda1 > /dev/sda2 ? (y,n) ' ADDM
 if [[ $ADDM == "Y" || $ADDM == "y" ]]; then
     echo -e "$CNT - Setup starting add mount ...................."
     btrfs device add -f /dev/sda1 /

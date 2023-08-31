@@ -17,7 +17,7 @@ sleep 2
 read -rep $'[\e[1;37mATTENTION\e[0m] - Are you install wayland desktop? (y,n) ' WAYLAND
 if [[ $WAYLAND == "Y" || $WAYLAND == "y" ]]; then
     echo -e "$CNT - Setup starting install wayland ..................."
-    paru -S sddm-git plasma-wayland-session  xdg-desktop-portal xorg-xeyes wl-clipboard spectacle plasma-wayland-protocols
+    paru -S sddm plasma-wayland-session  xdg-desktop-portal xorg-xeyes wl-clipboard spectacle plasma-wayland-protocols
     sleep 2
     echo -e "\n$CAC wayland done ..................."
 else
