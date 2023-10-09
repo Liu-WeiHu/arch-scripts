@@ -115,7 +115,7 @@ fi
 # add pipewire
 echo -e "\n$CNT install pipewire ......................."
 sleep 2
-pacman -S pipewire wireplumber pipewire-pulse
+pacman -S pipewire wireplumber pipewire-pulse gst-plugin-pipewire pipewire-alsa pipewire-audio pipewire-jack --needed
 echo -e "\n$CAC pipewire done ..................."
 sleep 2
 
