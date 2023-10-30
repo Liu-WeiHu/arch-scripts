@@ -16,14 +16,14 @@ sleep 2
 # install wayland
 read -rep $'[\e[1;37mATTENTION\e[0m] - Are you install wayland desktop? (y,n) ' WAYLAND
 if [[ $WAYLAND == "Y" || $WAYLAND == "y" ]]; then
-    echo -e "$CNT - Setup starting install wayland ..................."
-    paru -S sddm plasma-wayland-session  xdg-desktop-portal xorg-xeyes wl-clipboard spectacle plasma-wayland-protocols
-    sleep 2
-    echo -e "\n$CAC wayland done ..................."
+echo -e "$CNT - Setup starting install wayland ..................."
+paru -S sddm plasma-wayland-session  xdg-desktop-portal xdg-desktop-portal-kde xorg-xeyes wl-clipboard spectacle plasma-wayland-protocols --needed
+sleep 2
+echo -e "\n$CAC wayland done ..................."
 else
-    echo -e "$CNT - Setup starting install x11 ..................."
-    paru -S sddm xclip xsel flameshot --needed
-    echo -e "\n$CAC x11 done ..................."
+echo -e "$CNT - Setup starting install x11 ..................."
+paru -S sddm xclip xsel flameshot --needed
+echo -e "\n$CAC x11 done ..................."
 fi
 sleep 2
 sudo systemctl enable sddm

@@ -11,10 +11,10 @@ CAC="[\e[1;33mACTION\e[0m]"
 # check network
 ping -c 3 www.baidu.com > /dev/null
 if [ $? -eq 0 ]; then
-    echo -e "\n$COK network connected..................."
+echo -e "\n$COK network connected..................."
 else
-    echo -e "\n$CER network not connected, You must connect network ......."
-    exit 1
+echo -e "\n$CER network not connected, You must connect network ......."
+exit 1
 fi
 sleep 1
 
@@ -43,14 +43,14 @@ sleep 2
 # if install keyring ERROR
 read -rep $'[\e[1;37mATTENTION\e[0m] - Is it successful to install ArchlinuxCn Key? (y,n) ' KEY
 if [[ $KEY == "N" || $KEY == "n" ]]; then
-    echo -e "$CNT - Setup starting install archlinuxcn ..................."
-    rm -rf /etc/pacman.d/gnupg
-    sleep 2
-    pacman-key --init
-    sleep 2
-    pacman-key --populate archlinux archlinuxcn
-    echo -e "\n$CAC archlinuxcn done ..................."
-    sleep 2
+echo -e "$CNT - Setup starting install archlinuxcn ..................."
+rm -rf /etc/pacman.d/gnupg
+sleep 2
+pacman-key --init
+sleep 2
+pacman-key --populate archlinux archlinuxcn
+echo -e "\n$CAC archlinuxcn done ..................."
+sleep 2
 fi
 
 # install aur
@@ -82,10 +82,10 @@ sleep 2
 # add zram
 read -rep $'[\e[1;37mATTENTION\e[0m] - Do you install zram? (y,n) ' ZRAM
 if [[ $ZRAM == "Y" || $ZRAM == "y" ]]; then
-    echo -e "$CNT - Setup starting install zram .................."
-    pacman -S zram-generator
-    sleep 2
-    cat > /etc/systemd/zram-generator.conf << EOF
+echo -e "$CNT - Setup starting install zram .................."
+pacman -S zram-generator
+sleep 2
+cat > /etc/systemd/zram-generator.conf << EOF
 [zram0]
 zram-size = ram / 2
 compression-algorithm = zstd
@@ -101,7 +101,6 @@ sleep 2
 sed -i '/GRUB_CMDLINE_LINUX_DEFAULT=/s/.$/ zswap.enabled=0&/' /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 # Optimizing swap on zram
-touch /etc/sysctl.d/99-vm-zram-parameters.conf
 cat > /etc/sysctl.d/99-vm-zram-parameters.conf <<EOF
 vm.swappiness = 180
 vm.watermark_boost_factor = 0
@@ -143,10 +142,10 @@ sleep 2
 echo -e "\n\n"
 read -rep $'[\e[1;37mATTENTION\e[0m] - Do you add mount /dev/sda1 > /dev/sda2 ? (y,n) ' ADDM
 if [[ $ADDM == "Y" || $ADDM == "y" ]]; then
-    echo -e "$CNT - Setup starting add mount ...................."
-    btrfs device add -f /dev/sda1 /
-    echo -e "\n$CAC mount done ..................."
-    sleep 2
+echo -e "$CNT - Setup starting add mount ...................."
+btrfs device add -f /dev/sda1 /
+echo -e "\n$CAC mount done ..................."
+sleep 2
 fi
 
 sed -i 's/subvolid=[0-9]\{3\}/nodiscard/g' /etc/fstab

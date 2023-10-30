@@ -16,18 +16,18 @@ sleep 2
 # set time zone
 echo -e "\n$CNT Setting Zone Time ................."
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-hwclock --systohc
+hwclock --systohc --localtime
 echo -e "\n$CAC zone time done ..................."
 sleep 2
 
 # add nvim -> vim and nvim -> vi
 read -rep $'[\e[1;37mATTENTION\e[0m] - Whether to add nvim -> vim and nvim -> vi soft links (y,n) ' NVIM
 if [[ $NVIM == "Y" || $NVIM == "y" ]]; then
-    echo -e "$CNT - Setup starting nvim -> vim,vi ..............."
-    ln -sf /usr/bin/nvim /usr/bin/vim
-    ln -sf /usr/bin/nvim /usr/bin/vi
-    echo -e "\n$CAC nvim done ..................."
-    sleep 2
+echo -e "$CNT - Setup starting nvim -> vim,vi ..............."
+ln -sf /usr/bin/nvim /usr/bin/vim
+ln -sf /usr/bin/nvim /usr/bin/vi
+echo -e "\n$CAC nvim done ..................."
+sleep 2
 fi
 
 # set language
@@ -55,11 +55,11 @@ sleep 2
 # set btrfs to initramfs
 read -rep $'[\e[1;37mATTENTION\e[0m] - Setting btrfs to mkinitcpio.conf, Are you using the btrfs file system? (y,n) ' CONTINST
 if [[ $CONTINST == "Y" || $CONTINST == "y" ]]; then
-    echo -e "$CNT - Setup starting mkinitcpio ..............."
-    sed -i '/^MODULES=/s/.$/ btrfs&/' /etc/mkinitcpio.conf
-    sed -i '/^BINARIES=/s/.$/ btrfs&/' /etc/mkinitcpio.conf
-    echo -e "\n$CAC mkinitcpio done ..................."
-    sleep 2
+echo -e "$CNT - Setup starting mkinitcpio ..............."
+sed -i '/^MODULES=/s/.$/ btrfs&/' /etc/mkinitcpio.conf
+sed -i '/^BINARIES=/s/.$/ btrfs&/' /etc/mkinitcpio.conf
+echo -e "\n$CAC mkinitcpio done ..................."
+sleep 2
 fi
 
 # set root password
@@ -71,9 +71,9 @@ sleep 2
 # set fstrim
 read -rep $'[\e[1;37mATTENTION\e[0m] - Do you need to open fstrim serve? (y,n) ' FSTRIM
 if [[ $FSTRIM == "Y" || $FSTRIM == "y" ]]; then
-    systemctl enable fstrim.timer
-    echo -e "\n$CAC fstrim done ..................."
-    sleep 2
+systemctl enable fstrim.timer
+echo -e "\n$CAC fstrim done ..................."
+sleep 2
 fi
 
 # install ucode

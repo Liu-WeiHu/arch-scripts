@@ -17,8 +17,8 @@ sleep 2
 echo -e "\n$CNT install ark p7zip unrar unarchiver ............................"
 paru -S ark p7zip unrar unarchiver
 sleep 2
-echo -e "\n$CNT install v2ray v2raya docker docker-compose google-chrome-dev kate ............................"
-paru -S v2ray v2raya docker docker-compose google-chrome kate firefox
+echo -e "\n$CNT install v2ray v2raya docker docker-compose google-chrome kate firefox celluloid obs-studio ............................"
+paru -S v2ray v2raya docker docker-compose google-chrome kate firefox celluloid obs-studio
 sleep 2
 echo -e "\n$CAC desktop done .................."
 sleep 2
@@ -26,52 +26,61 @@ sleep 2
 # goland install
 read -rep $'[\e[1;37mATTENTION\e[0m] - Are you install goland ? (y,n) ' GOLAND
 if [[ $GOLAND == "Y" || $GOLAND == "y" ]]; then
-    echo -e "$CNT - Setup starting install goland goland-jre go rustup ..................."
-    paru -S goland goland-jre go rustup
+echo -e "$CNT - Setup starting install goland goland-jre go rustup ..................."
+paru -S goland goland-jre go rustup
 sleep 2
-    echo -e "\n$CAC goland done ..................."
+echo -e "\n$CAC goland done ..................."
 fi
 
 # clion install 
 read -rep $'[\e[1;37mATTENTION\e[0m] - Are you install clion ? (y,n) ' CLION
 if [[ $CLION == "Y" || $CLION == "y" ]]; then
-    echo -e "$CNT - Setup starting install goland goland-jre go rustup ..................."
-    paru -S clion clion-cmake clion-gdb clion-jre clion-lldb
+echo -e "$CNT - Setup starting install goland goland-jre go rustup ..................."
+paru -S clion clion-cmake clion-gdb clion-jre clion-lldb
 sleep 2
-    echo -e "\n$CAC clion done ..................."
+echo -e "\n$CAC clion done ..................."
 fi
 
 # kvm qemu install
 read -rep $'[\e[1;37mATTENTION\e[0m] - Are you install virt-manager qemu ? (y,n) ' QEMU
 if [[ $QEMU == "Y" || $QEMU == "y" ]]; then
-    echo -e "$CNT - Setup starting install virt-manager qemu-desktop dnsmasq iptables-nft samba ..................."
-    paru -S virt-manager qemu-desktop dnsmasq iptables-nft samba
+echo -e "$CNT - Setup starting install virt-manager qemu-desktop dnsmasq iptables-nft samba ..................."
+paru -S virt-manager qemu-desktop dnsmasq iptables-nft samba
 sleep 2
 
 # smb config
 echo -e "\n$CNT starting config smb ........................"
 sudo sh -c 'cat << EOF  > /etc/samba/smb.conf
 [Shared]
-        comment = Shared Folder for QEMU
-        path = /home/liu/Shared
-        public = yes
-        valid users = liu
-        browseable = yes
-        writeable = yes
-        read only = no
-        security = user
-        passdb backend = tdbsam
-        force user = liu
+comment = Shared Folder for QEMU
+path = /home/liu/Shared
+public = yes
+valid users = liu
+browseable = yes
+writeable = yes
+read only = no
+security = user
+passdb backend = tdbsam
+force user = liu
 [global]
-        server min protocol = NT1
-        lanman auth = yes
-        ntlm auth = yes
+server min protocol = NT1
+lanman auth = yes
+ntlm auth = yes
 EOF'
 sleep 2
 sudo systemctl enable --now smb
 sleep 2
 read -rep $'[\e[1;37mATTENTION\e[0m] - Enter the smb password: ' SMBP
 echo -e "${SMBP}\n${SMBP}" | sudo smbpasswd -a $USER
+sleep 2
+
+# celluloid 配置
+echo -e "\n$CNT starting config celluloid ........................"
+mkdir ~/.config/mpv
+cat > ~/.config/mpv/mpv.conf << EOF
+hwdec=vaapi
+gpu-hwdec-interop=vaapi
+EOF
 
 # libvirt config
 sleep 2
@@ -79,10 +88,10 @@ echo -e "\n$CNT starting config libvirt ........................"
 sudo usermod -a -G libvirt $USER
 sudo sh -c 'cat << EOF  > /etc/polkit-1/rules.d/50-libvirt.rules
 polkit.addRule(function(action, subject) {
-    if (action.id == "org.libvirt.unix.manage" &&
-        subject.isInGroup("libvirt")) {
-            return polkit.Result.YES;
-    }
+if (action.id == "org.libvirt.unix.manage" &&
+subject.isInGroup("libvirt")) {
+return polkit.Result.YES;
+}
 });
 EOF'
 sleep 2
@@ -96,25 +105,25 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 
 # end
 sleep 2
-    echo -e "\n$CAC virt-manager qemu done ..................."
+echo -e "\n$CAC virt-manager qemu done ..................."
 fi
 
 # kdeconnect install
 read -rep $'[\e[1;37mATTENTION\e[0m] - Are you install kdeconnect ? (y,n) ' KDECONNECT
 if [[ $KDECONNECT == "Y" || $KDECONNECT == "y" ]]; then
-    echo -e "$CNT - Setup starting install kdeconnect sshfs  python-nautilus ..................."
-    paru -S kdeconnect sshfs  python-nautilus
+echo -e "$CNT - Setup starting install kdeconnect sshfs  python-nautilus ..................."
+paru -S kdeconnect sshfs  python-nautilus
 sleep 2
-    echo -e "\n$CAC kdeconnect done ..................."
+echo -e "\n$CAC kdeconnect done ..................."
 fi
 
 # screenkey install
 read -rep $'[\e[1;37mATTENTION\e[0m] - Are you install screenkey ? (y,n) ' SCREENKEY
 if [[ $SCREENKEY == "Y" || $SCREENKEY == "y" ]]; then
-    echo -e "$CNT - Setup starting install screenkey ..................."
-    paru -S screenkey
+echo -e "$CNT - Setup starting install screenkey ..................."
+paru -S screenkey
 sleep 2
-    echo -e "\n$CAC screenkey done ..................."
+echo -e "\n$CAC screenkey done ..................."
 fi
 
 # user-dirs config
@@ -152,14 +161,15 @@ sed -i '/PS1=/d' ~/.bashrc
 sleep 2
 cat << EOF >> ~/.bashrc
 parse_git_branch() {
-     # git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1 )/'
-     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* [（头指针在 ]*\([0-9a-zA-Z+-\*/._=]*\)[ 分离）]*/ (\1 )/'
+# git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1 )/'
+git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* [（头指针在 ]*\([0-9a-zA-Z+-\*/._=]*\)[ 分离）]*/ (\1 )/'
 }
 PS1='💻 \[\033[1;34m\]\t 📁 \[\033[1;32m\]\W\$(parse_git_branch) \[\033[1;31m\]\$ \[\033[00m\]'
 
 export GOPATH='/home/liu/Documents/go'
 export RUSTUP_DIST_SERVER="https://rsproxy.cn"
 export RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"
+alias ali=aliyunpan-go
 EOF
 sleep 2
 source ~/.bashrc
@@ -173,17 +183,13 @@ mkdir ~/.cargo
 sleep 2
 cat << EOF > ~/.cargo/config
 [source.crates-io]
-# To use sparse index, change 'rsproxy' to 'rsproxy-sparse'
-replace-with = 'rsproxy'
-
+replace-with = 'rsproxy-sparse'
 [source.rsproxy]
 registry = "https://rsproxy.cn/crates.io-index"
 [source.rsproxy-sparse]
 registry = "sparse+https://rsproxy.cn/index/"
-
 [registries.rsproxy]
 index = "https://rsproxy.cn/crates.io-index"
-
 [net]
 git-fetch-with-cli = true
 EOF
@@ -217,15 +223,15 @@ extern2=DP-1-2
 xrandr=\$(xrandr)
 output=
 if [[ "\$xrandr" =~ "\$extern1 connected" ]]; then
-  output=\$extern1
+output=\$extern1
 elif [[ "\$xrandr" =~ "\$extern2 connected" ]]; then
-  output=\$extern2
+output=\$extern2
 fi
 
 if [[ -n "\$output" ]]; then
-  xrandr --output "\$intern" --off --output "\$output" --auto
+xrandr --output "\$intern" --off --output "\$output" --auto
 else
-  xrandr --output "\$intern" --auto
+xrandr --output "\$intern" --auto
 fi
 EOF'
 sleep 2

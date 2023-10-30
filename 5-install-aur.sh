@@ -16,7 +16,7 @@ sudo mkdir /etc/docker
 sleep 2
 sudo sh -c 'cat << EOF > /etc/docker/daemon.json
 {
-  "storage-driver": "btrfs"
+"storage-driver": "btrfs"
 }
 EOF'
 sleep 2
@@ -27,37 +27,41 @@ docker info | grep Storage
 sleep 5
 
 # aur install
-paru -S linuxqq visual-studio-code-bin dbeaver-ee
+paru -S linuxqq visual-studio-code-bin dbeaver-ee aliyunpan-go
 sleep 2
 
 # setup wayland config
 read -rep $'[\e[1;37mATTENTION\e[0m] - Are you setup wayland config? (y,n) ' WAYLANDC
 if [[ $WAYLANDC == "Y" || $WAYLANDC == "y" ]]; then
-    echo -e "$CNT - Setup starting config chrome wayland .................."
-    echo "--gtk-version=4" >  ~/.config/chrome-flags.conf
-    sleep 2
-    echo -e "$CNT - Setup starting config code wayland .................."
-    cat << EOF > ~/.config/code-flags.conf
+echo -e "$CNT - Setup starting config chrome wayland .................."
+echo "--gtk-version=4" >  ~/.config/chrome-flags.conf
+sleep 2
+echo -e "$CNT - Setup starting config code wayland .................."
+cat << EOF > ~/.config/code-flags.conf
 --ozone-platform=wayland
 --enable-wayland-ime
 EOF
-    sleep 2
-    echo -e "\n$CWR 设置 -> 输入设备 -> 虚拟键盘 fcitx5 选中\n"
-    sleep 2
-    echo -e "$CNT - Setup starting config electron wayland .................."
-    cat << EOF > ~/.config/electron-flags.conf
+sleep 2
+echo -e "\n$CWR 设置 -> 输入设备 -> 虚拟键盘 fcitx5 选中\n"
+sleep 2
+echo -e "$CNT - Setup starting config electron wayland .................."
+cat << EOF > ~/.config/electron-flags.conf
 --enable-features=WaylandWindowDecorations
 --ozone-platform-hint=auto
 --enable-webrtc-pipewire-capturer
 --gtk-version=4
 EOF
-    sleep 2
-    echo -e "$CNT - Setup starting config java wayland .................."
-    mkdir ~/.config/environment.d
-    echo "_JAVA_AWT_WM_NONREPARENTING=1" > ~/.config/environment.d/env.conf
-    sleep 2
-    echo -e "\n$CNT - Setup starting config sddm wayland .................."
-    sudo sh -c 'cat << EOF  > /etc/sddm.conf.d/10-wayland.conf
+sleep 2
+echo -e "$CNT - Setup starting config java wayland .................."
+mkdir ~/.config/environment.d
+cat > ~/.config/environment.d/env.conf << EOF
+_JAVA_AWT_WM_NONREPARENTING=1
+MOZ_ENABLE_WAYLAND=1
+BROWSER=firefox
+EOF
+sleep 2
+echo -e "\n$CNT - Setup starting config sddm wayland .................."
+sudo sh -c 'cat << EOF  > /etc/sddm.conf.d/10-wayland.conf
 [General]
 DisplayServer=wayland
 GreeterEnvironment=QT_WAYLAND_SHELL_INTEGRATION=layer-shell
