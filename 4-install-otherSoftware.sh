@@ -18,7 +18,7 @@ echo -e "\n$CNT install ark p7zip unrar unarchiver ............................"
 paru -S ark p7zip unrar unarchiver
 sleep 2
 echo -e "\n$CNT install v2ray v2raya docker docker-compose google-chrome-dev kate ............................"
-paru -S v2ray v2raya docker docker-compose google-chrome-dev kate
+paru -S v2ray v2raya docker docker-compose google-chrome kate firefox
 sleep 2
 echo -e "\n$CAC desktop done .................."
 sleep 2
@@ -232,21 +232,5 @@ sleep 2
 echo -e "\n$CAC xrandr done ..................."
 fi
 sleep 2
-
-# settings hugepages
-read -rep $'[\e[1;37mATTENTION\e[0m] - Are you settings hugepages ? (y,n) ' HUGEPAGES
-if [[ $HUGEPAGES == "Y" || $HUGEPAGES == "y" ]]; then
-echo -e "$CNT - Starting settings hugepages ..................."
-sudo sh -c 'cat << EOF >> /etc/fstab
-
-hugetlbfs       /dev/hugepages  hugetlbfs       mode=01770,gid=kvm        0 0
-EOF'
-sleep 2
-sudo sh -c 'echo 1100 > /proc/sys/vm/nr_hugepages'
-sleep 2
-sudo sh -c 'echo "vm.nr_hugepages = 1100" > /etc/sysctl.d/40-hugepage.conf'
-sleep 2
-echo -e "\n$CAC hugepages done ..................."
-fi
 
 echo -e "\n$COK ============================================\n"
