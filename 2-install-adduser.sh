@@ -99,6 +99,18 @@ systemctl start /dev/sda2
 # disable zswap, because kernel default enable zswap.
 sleep 2
 sed -i '/GRUB_CMDLINE_LINUX_DEFAULT=/s/.$/ zswap.enabled=0&/' /etc/default/grub
+sleep 2
+
+read -rep $'[\e[1;37mATTENTION\e[0m] - Do you want to probe other systems? (y,n) ' PROBE
+if [[ $ADDM == "Y" || $ADDM == "y" ]]; then
+echo -e "$CNT - setting probe ...................."
+sed -i 's/#GRUB_DISABLE_OS_PROBER=false/GRUB_DISABLE_OS_PROBER=false/' /etc/default/grub
+sleep 1
+pacman -S os-prober
+echo -e "\n$CAC probe done ..................."
+fi
+
+sleep 2
 grub-mkconfig -o /boot/grub/grub.cfg
 # Optimizing swap on zram
 cat > /etc/sysctl.d/99-vm-zram-parameters.conf <<EOF
