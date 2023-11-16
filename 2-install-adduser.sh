@@ -102,7 +102,7 @@ sed -i '/GRUB_CMDLINE_LINUX_DEFAULT=/s/.$/ zswap.enabled=0&/' /etc/default/grub
 sleep 2
 
 read -rep $'[\e[1;37mATTENTION\e[0m] - Do you want to probe other systems? (y,n) ' PROBE
-if [[ $ADDM == "Y" || $ADDM == "y" ]]; then
+if [[ $PROBE == "Y" || $PROBE == "y" ]]; then
 echo -e "$CNT - setting probe ...................."
 sed -i 's/#GRUB_DISABLE_OS_PROBER=false/GRUB_DISABLE_OS_PROBER=false/' /etc/default/grub
 sleep 1
