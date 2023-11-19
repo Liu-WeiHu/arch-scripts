@@ -25,7 +25,7 @@ sleep 2
 mkfs.fat -F32 /dev/nvme0n1p1
 echo -e "\n$CAC nvme0n1p1 done ...................."
 sleep 2
-mkfs.btrfs -f /dev/nvme0n1p2
+mkfs.btrfs -f -L "MyArch" /dev/nvme0n1p2
 echo -e "\n$CAC nvme0n1p2 done ...................."
 sleep 2
 # mkfs.btrfs -f /dev/nvme0n1p1
