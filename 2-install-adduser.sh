@@ -95,7 +95,7 @@ EOF
 sleep 2
 systemctl daemon-reload
 sleep 2
-systemctl start /dev/sda2
+systemctl start /dev/nvme0n1p2
 # disable zswap, because kernel default enable zswap.
 sleep 2
 sed -i '/GRUB_CMDLINE_LINUX_DEFAULT=/s/.$/ zswap.enabled=0&/' /etc/default/grub
@@ -150,15 +150,6 @@ EOF
 echo -e "\n$CAC fcitx5 done ..................."
 sleep 2
 
-# add mount
-echo -e "\n\n"
-read -rep $'[\e[1;37mATTENTION\e[0m] - Do you add mount /dev/sda1 > /dev/sda2 ? (y,n) ' ADDM
-if [[ $ADDM == "Y" || $ADDM == "y" ]]; then
-echo -e "$CNT - Setup starting add mount ...................."
-btrfs device add -f /dev/sda1 /
-echo -e "\n$CAC mount done ..................."
-sleep 2
-fi
 
 sed -i 's/subvolid=[0-9]\{3\}/nodiscard/g' /etc/fstab
 sleep 2

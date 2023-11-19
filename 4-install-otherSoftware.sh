@@ -8,11 +8,8 @@ CAT="[\e[1;37mATTENTION\e[0m]"
 CWR="[\e[1;35mWARNING\e[0m]"
 CAC="[\e[1;33mACTION\e[0m]"
 
-echo -e "\n$CNT install gwenview qt5-imageformats  kimageformats ............................"
-paru -S gwenview qt5-imageformats  kimageformats
-sleep 2
-echo -e "\n$CNT install dolphin ffmpegthumbs  kdegraphics-thumbnailers 	dolphin-plugins ............................"
-paru -S dolphin ffmpegthumbs  kdegraphics-thumbnailers 	dolphin-plugins --needed
+echo -e "\n$CNT install gwenview dolphin............................"
+paru -S gwenview dolphin
 sleep 2
 echo -e "\n$CNT install ark p7zip unrar unarchiver ............................"
 paru -S ark p7zip unrar unarchiver
@@ -44,7 +41,7 @@ fi
 # kvm qemu install
 read -rep $'[\e[1;37mATTENTION\e[0m] - Are you install virt-manager qemu ? (y,n) ' QEMU
 if [[ $QEMU == "Y" || $QEMU == "y" ]]; then
-echo -e "$CNT - Setup starting install virt-manager qemu-desktop dnsmasq iptables-nft samba ..................."
+echo -e "$CNT - Setup starting install virt-manager qemu-full dnsmasq iptables-nft samba ..................."
 paru -S virt-manager qemu-desktop dnsmasq iptables-nft samba
 sleep 2
 
@@ -106,24 +103,6 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 # end
 sleep 2
 echo -e "\n$CAC virt-manager qemu done ..................."
-fi
-
-# kdeconnect install
-read -rep $'[\e[1;37mATTENTION\e[0m] - Are you install kdeconnect ? (y,n) ' KDECONNECT
-if [[ $KDECONNECT == "Y" || $KDECONNECT == "y" ]]; then
-echo -e "$CNT - Setup starting install kdeconnect sshfs  python-nautilus ..................."
-paru -S kdeconnect sshfs  python-nautilus
-sleep 2
-echo -e "\n$CAC kdeconnect done ..................."
-fi
-
-# screenkey install
-read -rep $'[\e[1;37mATTENTION\e[0m] - Are you install screenkey ? (y,n) ' SCREENKEY
-if [[ $SCREENKEY == "Y" || $SCREENKEY == "y" ]]; then
-echo -e "$CNT - Setup starting install screenkey ..................."
-paru -S screenkey
-sleep 2
-echo -e "\n$CAC screenkey done ..................."
 fi
 
 # user-dirs config
