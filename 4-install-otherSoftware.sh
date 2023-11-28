@@ -75,7 +75,7 @@ sleep 2
 echo -e "\n$CNT starting config celluloid ........................"
 mkdir ~/.config/mpv
 cat > ~/.config/mpv/mpv.conf << EOF
-hwdec=vaapi
+hwdec=vulkan,vaapi
 gpu-hwdec-interop=vaapi
 EOF
 
