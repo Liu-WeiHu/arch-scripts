@@ -25,7 +25,8 @@ sleep 2
 mkfs.fat -F32 /dev/nvme0n1p1
 echo -e "\n$CAC nvme0n1p1 done ...................."
 sleep 2
-mkfs.btrfs -f -L "MyArch" /dev/nvme0n1p2
+# 如果是多磁盘还需要加上 -d raid0 -m raid1
+mkfs.btrfs -f -L "MyArch" --checksum xxhash /dev/nvme0n1p2
 echo -e "\n$CAC nvme0n1p2 done ...................."
 sleep 2
 # mkfs.btrfs -f /dev/nvme0n1p1
