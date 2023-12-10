@@ -11,8 +11,8 @@ CAC="[\e[1;33mACTION\e[0m]"
 echo -e "\n$CNT install gwenview dolphin............................"
 paru -S gwenview dolphin
 sleep 2
-echo -e "\n$CNT install ark p7zip unrar unarchiver ............................"
-paru -S ark p7zip unrar unarchiver
+echo -e "\n$CNT install ark 7-zip-full unrar unarchiver ............................"
+paru -S ark 7-zip-full unrar unarchiver
 sleep 2
 echo -e "\n$CNT install v2ray v2raya docker docker-compose google-chrome kate firefox celluloid obs-studio libreoffice-still ............................"
 paru -S v2ray v2raya docker docker-compose google-chrome kate firefox celluloid obs-studio libreoffice-still libreoffice-still-zh-cn
