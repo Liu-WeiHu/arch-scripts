@@ -38,10 +38,16 @@ read -rep $'[\e[1;37mATTENTION\e[0m] - Are you setup wayland config? (y,n) ' WAY
 if [[ $WAYLANDC == "Y" || $WAYLANDC == "y" ]]; then
 echo -e "$CNT - Setup starting config electron wayland .................."
 cat << EOF > ~/.config/electron-flags.conf
---enable-features=WaylandWindowDecorations
 --ozone-platform-hint=auto
+--ignore-gpu-blocklist
+--enable-features=WaylandWindowDecorations
+--enable-gpu-rasterization
+--enable-zero-copy
+--enable-wayland-ime
+--disable-gpu-driver-bug-workarounds
+--enable-features=VaapiVideoDecoder,VaapiIgnoreDriverChecks
+--disable-features=UseChromeOSDirectVideoDecoder
 --enable-webrtc-pipewire-capturer
---gtk-version=4
 EOF
 sleep 2
 echo -e "$CNT - Setup starting config java wayland .................."
