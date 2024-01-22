@@ -14,8 +14,8 @@ sleep 2
 echo -e "\n$CNT install ark 7-zip-full unrar unarchiver ............................"
 paru -S ark 7-zip-full unrar unarchiver
 sleep 2
-echo -e "\n$CNT install v2ray v2raya docker docker-compose google-chrome kate firefox celluloid obs-studio libreoffice-still ............................"
-paru -S v2ray v2raya docker docker-compose google-chrome kate firefox celluloid obs-studio libreoffice-still libreoffice-still-zh-cn
+echo -e "\n$CNT install v2ray v2raya docker docker-compose google-chrome kate firefox obs-studio libreoffice-still ............................"
+paru -S v2ray v2raya docker docker-compose google-chrome kate firefox obs-studio libreoffice-still libreoffice-still-zh-cn
 sleep 2
 echo -e "\n$CAC desktop done .................."
 sleep 2
@@ -72,12 +72,12 @@ echo -e "${SMBP}\n${SMBP}" | sudo smbpasswd -a $USER
 sleep 2
 
 # celluloid 配置
-echo -e "\n$CNT starting config celluloid ........................"
-mkdir ~/.config/mpv
-cat > ~/.config/mpv/mpv.conf << EOF
-hwdec=vulkan,vaapi
-gpu-hwdec-interop=vaapi
-EOF
+# echo -e "\n$CNT starting config celluloid ........................"
+# mkdir ~/.config/mpv
+# cat > ~/.config/mpv/mpv.conf << EOF
+# hwdec=vulkan,vaapi
+# gpu-hwdec-interop=vaapi
+# EOF
 
 # libvirt config
 sleep 2
@@ -143,7 +143,7 @@ parse_git_branch() {
 # git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1 )/'
 git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* [（头指针在 ]*\([0-9a-zA-Z+-\*/._=]*\)[ 分离）]*/ (\1 )/'
 }
-PS1='💻 \[\033[1;34m\]\t 📁 \[\033[1;32m\]\W\$(parse_git_branch) \[\033[1;31m\]\$ \[\033[00m\]'
+PS1='░▒▓\e[30;47;1m  \e[37;45;1m \w$(parse_git_branch)\e[m\[\033[0;35m\]\[\033[00m\]'
 
 export GOPATH='/home/liu/Documents/go'
 export RUSTUP_DIST_SERVER="https://rsproxy.cn"
