@@ -48,4 +48,12 @@ git config --global user.name "Liu WeiHu"
 git config --global user.email 6460176@qq.com
 sleep 2
 
+echo -e "\n$CNT starting Disabling the baloo ........................."
+balooctl suspend
+sleep 1
+balooctl disable
+sleep 1
+balooctl purge
+sleep 2
+
 echo -e "\n$COK Has been completed. >>>>>>>>>>>>>>>>>  reboot \n"
