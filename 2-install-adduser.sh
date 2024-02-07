@@ -69,7 +69,7 @@ read -rep $'[\e[1;37mATTENTION\e[0m] - Please enter the user name: ' UUSER
 useradd -m -G wheel $UUSER
 read -rep $'[\e[1;37mATTENTION\e[0m] - Please enter the user password: ' PASSWD
 echo -e "${PASSWD}\n${PASSWD}" | passwd $UUSER
-sed -i 's/^# %wheel ALL=/%wheel ALL=/g' /etc/sudoers
+sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/g' /etc/sudoers
 echo -e "\n$CAC user done ..................."
 sleep 2
 
