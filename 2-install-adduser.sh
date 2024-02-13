@@ -36,6 +36,8 @@ EOF
 sleep 2
 pacman -Sy
 sleep 2
+pacman-key --lsign-key "farseerfc@archlinux.org"
+sleep 2
 pacman -S archlinuxcn-keyring
 echo -e "\n$CAC archlinuxcn done ..................."
 sleep 2
