@@ -109,9 +109,18 @@ sleep 1
 pacman -S os-prober
 echo -e "\n$CAC probe done ..................."
 fi
-
 sleep 2
 grub-mkconfig -o /boot/grub/grub.cfg
+sleep 2
+
+read -rep $'[\e[1;37mATTENTION\e[0m] - Do you want to install power management? (y,n) ' POWER
+if [[ $POWER == "Y" || $POWER == "y" ]]; then
+echo -e "$CNT - start install power management ...................."
+pacman -S powerdevil power-profiles-daemon
+echo -e "\n$CAC power management done ..................."
+fi
+sleep 2
+
 # Optimizing swap on zram
 cat > /etc/sysctl.d/99-vm-zram-parameters.conf <<EOF
 vm.swappiness = 180
@@ -130,11 +139,26 @@ pacman -S pipewire wireplumber pipewire-pulse gst-plugin-pipewire pipewire-alsa 
 echo -e "\n$CAC pipewire done ..................."
 sleep 2
 
-# add intel Installing a video card
-echo -e "\n$CNT starting Installing a video card ...................."
+# add Integrated graphics
+echo -e "\n$CNT starting install Integrated graphics Please select your cpu type ......................"
+pacman -S mesa libva-utils vulkan-icd-loader vulkan-tools
 sleep 2
-pacman -S mesa libva-utils intel-media-driver vulkan-intel  vulkan-icd-loader
-echo -e "\n$CAC video card done ..................."
+select graphics in "cpu-intel" "cpu-amd"
+do
+	case $graphics in
+		"cpu-intel")
+			pacman -S intel-media-driver vulkan-intel  
+			break
+			;;
+		"cpu-amd")
+			pacman -S libva-mesa-driver vulkan-radeon 
+			break
+			;;
+		*)
+			echo "Input error, please retype"
+	esac
+done
+echo -e "\n$CAC Integrated graphics done ..................."
 sleep 2
 
 # add fcitx5
