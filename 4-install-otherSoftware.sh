@@ -98,7 +98,7 @@ sudo virsh net-autostart default
 
 # configure qemu
 sudo sed -i '/GRUB_CMDLINE_LINUX_DEFAULT=/s/.$/ qxl bochs_drm&/' /etc/default/grub
-sudo grub-mkconfig -o /boot/grub/grub.cfg
+sudo grub-mkconfig -o /efi/grub/grub.cfg
 
 # end
 sleep 2

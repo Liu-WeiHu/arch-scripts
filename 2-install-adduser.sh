@@ -112,7 +112,7 @@ pacman -S os-prober
 echo -e "\n$CAC probe done ..................."
 fi
 sleep 2
-grub-mkconfig -o /boot/grub/grub.cfg
+grub-mkconfig -o /efi/grub/grub.cfg
 sleep 2
 
 read -rep $'[\e[1;37mATTENTION\e[0m] - Do you want to install power management? (y,n) ' POWER

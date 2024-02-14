@@ -104,7 +104,7 @@ sed -i '/GRUB_CMDLINE_LINUX_DEFAULT=/c\GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"' 
 sed -i '/GRUB_PRELOAD_MODULES=/s/.$/ btrfs&/' /etc/default/grub
 grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=Arch --boot-directory=/efi
 sleep 2
-grub-mkconfig -o /boot/grub/grub.cfg
+grub-mkconfig -o /efi/grub/grub.cfg
 echo -e "\n$CAC grub done ..................."
 sleep 2
 
