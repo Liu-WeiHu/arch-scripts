@@ -27,7 +27,7 @@ docker info | grep Storage
 sleep 5
 
 # aur install
-paru -S linuxqq visual-studio-code-bin dbeaver-ee aliyunpan-go wireshark-qt
+paru -S linuxqq visual-studio-code-bin dbeaver-ee wireshark-qt
 sleep 2
 
 # setup wireshark config

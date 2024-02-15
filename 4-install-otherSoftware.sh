@@ -148,7 +148,6 @@ PS1='░▒▓\e[30;47;1m  \e[37;45;1m \w$(parse_git_branch)\e[m\[\033[0;3
 export GOPATH='/home/liu/Documents/go'
 export RUSTUP_DIST_SERVER="https://rsproxy.cn"
 export RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"
-alias ali=aliyunpan-go
 EOF
 sleep 2
 source ~/.bashrc
