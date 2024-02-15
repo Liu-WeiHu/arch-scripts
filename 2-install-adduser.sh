@@ -107,6 +107,7 @@ read -rep $'[\e[1;37mATTENTION\e[0m] - Do you want to probe other systems? (y,n)
 if [[ $PROBE == "Y" || $PROBE == "y" ]]; then
 echo -e "$CNT - setting probe ...................."
 sed -i 's/#GRUB_DISABLE_OS_PROBER=false/GRUB_DISABLE_OS_PROBER=false/' /etc/default/grub
+sed -i 's/GRUB_GFXMODE=auto/GRUB_GFXMODE=1280x1024/' /etc/default/grub
 sleep 1
 pacman -S os-prober
 echo -e "\n$CAC probe done ..................."
