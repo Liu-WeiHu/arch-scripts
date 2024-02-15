@@ -15,7 +15,7 @@ echo -e "\n$CNT install ark 7-zip-full unrar unarchiver ........................
 paru -S ark 7-zip-full unrar unarchiver
 sleep 2
 echo -e "\n$CNT install v2ray v2raya docker docker-compose google-chrome kate firefox obs-studio libreoffice-still ............................"
-paru -S v2ray v2raya docker docker-compose google-chrome kate firefox obs-studio libreoffice-still libreoffice-still-zh-cn
+paru -S v2ray v2raya docker docker-compose chromium kate firefox obs-studio libreoffice-still libreoffice-still-zh-cn
 sleep 2
 echo -e "\n$CAC desktop done .................."
 sleep 2

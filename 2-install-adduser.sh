@@ -115,14 +115,6 @@ sleep 2
 grub-mkconfig -o /efi/grub/grub.cfg
 sleep 2
 
-read -rep $'[\e[1;37mATTENTION\e[0m] - Do you want to install power management? (y,n) ' POWER
-if [[ $POWER == "Y" || $POWER == "y" ]]; then
-echo -e "$CNT - start install power management ...................."
-pacman -S powerdevil power-profiles-daemon
-echo -e "\n$CAC power management done ..................."
-fi
-sleep 2
-
 # Optimizing swap on zram
 cat > /etc/sysctl.d/99-vm-zram-parameters.conf <<EOF
 vm.swappiness = 180
