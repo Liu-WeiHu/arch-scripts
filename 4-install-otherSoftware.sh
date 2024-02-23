@@ -143,7 +143,7 @@ parse_git_branch() {
 # git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1 )/'
 git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* [（头指针在 ]*\([0-9a-zA-Z+-\*/._=]*\)[ 分离）]*/ (\1 )/'
 }
-PS1='░▒▓\e[30;47;1m  \e[37;45;1m \w$(parse_git_branch)\e[m\[\033[0;35m\]\[\033[00m\]'
+PS1='░▒▓\e[30;47;1m  \e[37;45m \w$(parse_git_branch)\e[0m\e[35m\e[0m\e[1C'
 
 export GOPATH='/home/liu/Documents/go'
 export RUSTUP_DIST_SERVER="https://rsproxy.cn"
