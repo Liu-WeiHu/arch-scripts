@@ -217,4 +217,9 @@ echo -e "\n$CAC xrandr done ..................."
 fi
 sleep 2
 
+# disable startup discover
+cp /etc/xdg/autostart/org.kde.discover.notifier.desktop  ~/.config/autostart/
+sleep 1
+echo Hidden=True >> ~/.config/autostart/org.kde.discover.notifier.desktop
+
 echo -e "\n$COK ============================================\n"
