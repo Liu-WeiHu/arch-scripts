@@ -77,7 +77,7 @@ sleep 2
 
 # add fonts
 echo -e "\n$CNT install fonts .........................."
-pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-noto-nerd  ttf-lxgw-wenkai-mono ttf-lxgw-wenkai
+pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-noto-nerd
 echo -e "\n$CAC fonts done ..................."
 sleep 2
 
