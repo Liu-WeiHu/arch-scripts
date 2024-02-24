@@ -221,5 +221,19 @@ sleep 2
 cp /etc/xdg/autostart/org.kde.discover.notifier.desktop  ~/.config/autostart/
 sleep 1
 echo Hidden=True >> ~/.config/autostart/org.kde.discover.notifier.desktop
+sleep 2
+echo -e "\n$CAC disable startup discover done ..................."
+
+# startup net optimize
+sudo sh -c 'cat << EOF  > /etc/sysctl.d/20-fast.conf
+net.ipv4.tcp_fastopen = 3
+EOF'
+sleep 1
+
+sudo sh -c 'cat << EOF  > /etc/sysctl.d/30-bbr.conf
+net.core.default_qdisc = cake
+net.ipv4.tcp_congestion_control = bbr
+EOF'
+sleep 1
 
 echo -e "\n$COK ============================================\n"
