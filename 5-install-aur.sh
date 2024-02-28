@@ -64,10 +64,15 @@ fi
 # 182.254.116.116->direct
 # tcp://dns.alidns.com:53->direct
 
+# 223.5.5.5 -> direct
+# 119.29.29.29 -> direct
+
 # 国外域名查询服务器
 # 8.8.4.4:53->proxy
 # tcp://1.0.0.1:53->proxy
 # tcp://dns.opendns.com:5353->proxy
 
+# 8.8.4.4 -> proxy
+# tcp://dns.opendns.com:5353 -> proxy
 
 echo -e "\n$COK ============================================\n"
