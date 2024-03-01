@@ -236,4 +236,7 @@ net.ipv4.tcp_congestion_control = bbr
 EOF'
 sleep 1
 
+sudo modprobe tcp_bbr
+sleep 1
+
 echo -e "\n$COK ============================================\n"
