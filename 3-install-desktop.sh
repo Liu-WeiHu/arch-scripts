@@ -10,7 +10,7 @@ CAC="[\e[1;33mACTION\e[0m]"
 
 # install desktop
 echo -e "\n$CNT install plasma-meta yakuake ............................."
-paru -S plasma-meta yakuake
+paru -S plasma-meta konsole
 sleep 2
 
 # install wayland
@@ -48,6 +48,7 @@ git config --global user.name "Liu WeiHu"
 git config --global user.email 6460176@qq.com
 sleep 2
 
+# close kde baloo
 echo -e "\n$CNT starting Disabling the baloo ........................."
 balooctl suspend
 sleep 1

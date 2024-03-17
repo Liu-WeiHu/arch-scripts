@@ -16,7 +16,7 @@ sleep 2
 # set time zone
 echo -e "\n$CNT Setting Zone Time ................."
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-hwclock --systohc --localtime
+hwclock --systohc
 echo -e "\n$CAC zone time done ..................."
 sleep 2
 
@@ -52,15 +52,10 @@ EOF
 echo -e "\n$CAC network done ..................."
 sleep 2
 
-# set btrfs to initramfs
-read -rep $'[\e[1;37mATTENTION\e[0m] - Setting btrfs to mkinitcpio.conf, Are you using the btrfs file system? (y,n) ' CONTINST
-if [[ $CONTINST == "Y" || $CONTINST == "y" ]]; then
-echo -e "$CNT - Setup starting mkinitcpio ..............."
-sed -i '/^MODULES=/s/.$/ btrfs&/' /etc/mkinitcpio.conf
-sed -i '/^BINARIES=/s/.$/ btrfs&/' /etc/mkinitcpio.conf
-echo -e "\n$CAC mkinitcpio done ..................."
+# systemd based initial ramdisk
+sed -i '/^HOOKS=/s/.$/ systemd&/' /etc/mkinitcpio.conf
+echo -e "\n$CAC systemd based initial ramdisk done ..................."
 sleep 2
-fi
 
 # set root password
 read -rep $'[\e[1;37mATTENTION\e[0m] - Setup root passwd, Please enter root password: ' PASSWD
@@ -100,8 +95,17 @@ sleep 2
 echo -e "\n$CNT startings install grub ..............."
 pacman -S grub efibootmgr
 sleep 2
+read -rep $'[\e[1;37mATTENTION\e[0m] - Do you want to probe other systems? (y,n) ' PROBE
+if [[ $PROBE == "Y" || $PROBE == "y" ]]; then
+echo -e "$CNT - setting probe ...................."
+sed -i 's/#GRUB_DISABLE_OS_PROBER=false/GRUB_DISABLE_OS_PROBER=false/' /etc/default/grub
+sleep 1
+pacman -S os-prober
+echo -e "\n$CAC probe done ..................."
+fi
+sleep 2
 sed -i '/GRUB_CMDLINE_LINUX_DEFAULT=/c\GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"' /etc/default/grub
-sed -i '/GRUB_PRELOAD_MODULES=/s/.$/ btrfs&/' /etc/default/grub
+sed -i 's/GRUB_GFXMODE=auto/GRUB_GFXMODE=1280x1024/' /etc/default/grub
 grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=Arch --boot-directory=/efi
 sleep 2
 grub-mkconfig -o /efi/grub/grub.cfg

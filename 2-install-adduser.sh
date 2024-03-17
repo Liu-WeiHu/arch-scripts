@@ -77,55 +77,42 @@ sleep 2
 
 # add fonts
 echo -e "\n$CNT install fonts .........................."
-pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-noto-nerd
+pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-noto-nerd ttf-lxgw-wenkai-mono ttf-lxgw-wenkai
 echo -e "\n$CAC fonts done ..................."
 sleep 2
 
 # add zram
-read -rep $'[\e[1;37mATTENTION\e[0m] - Do you install zram? (y,n) ' ZRAM
-if [[ $ZRAM == "Y" || $ZRAM == "y" ]]; then
-echo -e "$CNT - Setup starting install zram .................."
-pacman -S zram-generator
-sleep 2
-cat > /etc/systemd/zram-generator.conf << EOF
-[zram0]
-zram-size = ram / 2
-compression-algorithm = zstd
-swap-priority = 100
-fs-type = swap
-EOF
-sleep 2
-systemctl daemon-reload
-sleep 2
-systemctl start /dev/nvme0n1p2
-# disable zswap, because kernel default enable zswap.
-sleep 2
-sed -i '/GRUB_CMDLINE_LINUX_DEFAULT=/s/.$/ zswap.enabled=0&/' /etc/default/grub
-sleep 2
+# read -rep $'[\e[1;37mATTENTION\e[0m] - Do you install zram? (y,n) ' ZRAM
+# if [[ $ZRAM == "Y" || $ZRAM == "y" ]]; then
+# echo -e "$CNT - Setup starting install zram .................."
+# pacman -S zram-generator
+# sleep 2
+# cat > /etc/systemd/zram-generator.conf << EOF
+# [zram0]
+# zram-size = ram / 2
+# compression-algorithm = zstd
+# swap-priority = 100
+# fs-type = swap
+# EOF
+# sleep 2
+# systemctl daemon-reload
+# sleep 2
+# systemctl start /dev/nvme0n1p2
+# # disable zswap, because kernel default enable zswap.
+# sleep 2
+# sed -i '/GRUB_CMDLINE_LINUX_DEFAULT=/s/.$/ zswap.enabled=0&/' /etc/default/grub
+# sleep 2
 
-read -rep $'[\e[1;37mATTENTION\e[0m] - Do you want to probe other systems? (y,n) ' PROBE
-if [[ $PROBE == "Y" || $PROBE == "y" ]]; then
-echo -e "$CNT - setting probe ...................."
-sed -i 's/#GRUB_DISABLE_OS_PROBER=false/GRUB_DISABLE_OS_PROBER=false/' /etc/default/grub
-sed -i 's/GRUB_GFXMODE=auto/GRUB_GFXMODE=1280x1024/' /etc/default/grub
-sleep 1
-pacman -S os-prober
-echo -e "\n$CAC probe done ..................."
-fi
-sleep 2
-grub-mkconfig -o /efi/grub/grub.cfg
-sleep 2
-
-# Optimizing swap on zram
-cat > /etc/sysctl.d/99-vm-zram-parameters.conf <<EOF
-vm.swappiness = 180
-vm.watermark_boost_factor = 0
-vm.watermark_scale_factor = 125
-vm.page-cluster = 0
-EOF
-echo -e "\n$CAC zram done ..................."
-sleep 2
-fi
+# # Optimizing swap on zram
+# cat > /etc/sysctl.d/99-vm-zram-parameters.conf <<EOF
+# vm.swappiness = 180
+# vm.watermark_boost_factor = 0
+# vm.watermark_scale_factor = 125
+# vm.page-cluster = 0
+# EOF
+# echo -e "\n$CAC zram done ..................."
+# sleep 2
+# fi
 
 # add pipewire
 echo -e "\n$CNT install pipewire ......................."
@@ -169,9 +156,38 @@ EOF
 echo -e "\n$CAC fcitx5 done ..................."
 sleep 2
 
-
+ # fix fstab
 sed -i 's/subvolid=[0-9]\{3\}/nodiscard/g' /etc/fstab
 sleep 2
+
+# config network
+echo -e "\n$CNT starting config networkmanager ........................."
+cat << EOF  > /etc/NetworkManager/conf.d/20-connectivity.conf
+[connectivity]
+enabled=false
+EOF
+echo -e "\n$CAC networkmanager done ..................."
+sleep 2
+
+# setup paccache
+echo -e "\n$CNT starting setup paccache ........................"
+systemctl enable paccache.timer
+sleep 2
+
+# startup net optimize
+cat << EOF  > /etc/sysctl.d/20-fast.conf
+net.ipv4.tcp_fastopen = 3
+EOF
+sleep 1
+
+cat << EOF  > /etc/sysctl.d/30-bbr.conf
+net.core.default_qdisc = cake
+net.ipv4.tcp_congestion_control = bbr
+EOF
+sleep 1
+
+modprobe tcp_bbr
+sleep 1
 
 # mv script to home
 mv ~/arch-scripts /home/$UUSER/
