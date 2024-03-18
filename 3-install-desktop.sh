@@ -17,7 +17,7 @@ sleep 2
 read -rep $'[\e[1;37mATTENTION\e[0m] - Are you install wayland desktop? (y,n) ' WAYLAND
 if [[ $WAYLAND == "Y" || $WAYLAND == "y" ]]; then
 echo -e "$CNT - Setup starting install wayland ..................."
-paru -S sddm plasma-wayland-session  xdg-desktop-portal xdg-desktop-portal-kde xorg-xeyes wl-clipboard spectacle plasma-wayland-protocols --needed
+paru -S sddm xdg-desktop-portal xdg-desktop-portal-kde xorg-xeyes wl-clipboard spectacle plasma-wayland-protocols --needed
 sleep 2
 echo -e "\n$CAC wayland done ..................."
 else
@@ -50,11 +50,11 @@ sleep 2
 
 # close kde baloo
 echo -e "\n$CNT starting Disabling the baloo ........................."
-balooctl suspend
+balooctl6 suspend
 sleep 1
-balooctl disable
+balooctl6 disable
 sleep 1
-balooctl purge
+balooctl6 purge
 sleep 2
 
 echo -e "\n$COK Has been completed. >>>>>>>>>>>>>>>>>  reboot \n"
