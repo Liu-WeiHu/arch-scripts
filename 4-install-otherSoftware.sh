@@ -143,7 +143,7 @@ parse_git_branch() {
 # git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1 )/'
 git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* [（头指针在 ]*\([0-9a-zA-Z+-\*/._=]*\)[ 分离）]*/ (\1 )/'
 }
-PS1='░▒▓\e[30;47;1m  \e[37;45m \w$(parse_git_branch)\e[0m\e[35m\e[0m\e[1C'
+PS1='░▒▓\[\033[30;47;1m\]  \[\033[37;45m\] \W$(parse_git_branch)\[\033[0m\]\[\033[35m\]\[\033[0m\]'
 
 export GOPATH='/home/liu/Documents/go'
 export RUSTUP_DIST_SERVER="https://rsproxy.cn"
@@ -214,8 +214,10 @@ sleep 2
 
 # disable startup discover
 cp /etc/xdg/autostart/org.kde.discover.notifier.desktop  ~/.config/autostart/
+cp /etc/xdg/autostart/kaccess.desktop  ~/.config/autostart/
 sleep 1
 echo Hidden=True >> ~/.config/autostart/org.kde.discover.notifier.desktop
+echo Hidden=True >> ~/.config/autostart/kaccess.desktop
 sleep 2
 echo -e "\n$CAC disable startup discover done ..................."
 

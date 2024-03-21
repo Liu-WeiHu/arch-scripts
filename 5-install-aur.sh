@@ -38,6 +38,7 @@ read -rep $'[\e[1;37mATTENTION\e[0m] - Are you setup wayland config? (y,n) ' WAY
 if [[ $WAYLANDC == "Y" || $WAYLANDC == "y" ]]; then
 echo -e "$CNT - Setup starting config electron wayland .................."
 cat << EOF > ~/.config/electron-flags.conf
+--enable-features=UseOzonePlatform
 --ozone-platform-hint=auto
 --ignore-gpu-blocklist
 --enable-features=WaylandWindowDecorations
