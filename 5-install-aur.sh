@@ -33,32 +33,6 @@ sleep 2
 # setup wireshark config
 sudo gpasswd -a $USER wireshark
 
-# setup wayland config
-read -rep $'[\e[1;37mATTENTION\e[0m] - Are you setup wayland config? (y,n) ' WAYLANDC
-if [[ $WAYLANDC == "Y" || $WAYLANDC == "y" ]]; then
-echo -e "$CNT - Setup starting config electron wayland .................."
-cat << EOF > ~/.config/electron-flags.conf
---enable-features=UseOzonePlatform
---ozone-platform-hint=auto
---ignore-gpu-blocklist
---enable-features=WaylandWindowDecorations
---enable-gpu-rasterization
---enable-zero-copy
---enable-wayland-ime
---disable-gpu-driver-bug-workarounds
---enable-features=VaapiVideoDecoder,VaapiIgnoreDriverChecks
---disable-features=UseChromeOSDirectVideoDecoder
---enable-webrtc-pipewire-capturer
-EOF
-sleep 2
-echo -e "$CNT - Setup starting config java wayland .................."
-mkdir ~/.config/environment.d
-cat > ~/.config/environment.d/env.conf << EOF
-_JAVA_AWT_WM_NONREPARENTING=1
-MOZ_ENABLE_WAYLAND=1
-BROWSER=firefox
-EOF
-fi
 
 # v2raya 配置
 # 域名查询服务器

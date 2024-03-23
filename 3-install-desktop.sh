@@ -29,19 +29,6 @@ sleep 2
 sudo systemctl enable sddm
 sleep 2
 
-# config
-echo -e "\n$CNT starting config networkmanager ........................."
-sudo sh -c 'cat << EOF  > /etc/NetworkManager/conf.d/20-connectivity.conf
-[connectivity]
-enabled=false
-EOF'
-echo -e "\n$CAC networkmanager done ..................."
-sleep 2
-
-echo -e "\n$CNT starting config inputrc ........................."
-cat > ~/.inputrc << EOF
-set completion-ignore-case on
-EOF
 sleep 2
 echo -e "\n$CNT starting config git ........................."
 git config --global user.name "Liu WeiHu"

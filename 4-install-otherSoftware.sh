@@ -105,72 +105,10 @@ sleep 2
 echo -e "\n$CAC virt-manager qemu done ..................."
 fi
 
-# user-dirs config
-echo -e "\n$CNT starting config off user-dirs ............................"
-sudo sed -i 's/enabled=True/enabled=False/' /etc/xdg/user-dirs.conf
-sleep 2
-echo -e "\n$CNT starting config user-dirs.dirs ........................"
-cat > ~/.config/user-dirs.dirs  << EOF
-XDG_DESKTOP_DIR="\$HOME/Desktop"
-XDG_DOCUMENTS_DIR="\$HOME/Documents"
-XDG_DOWNLOAD_DIR="\$HOME/Downloads"
-XDG_MUSIC_DIR="\$HOME/Media/Music"
-XDG_PICTURES_DIR="\$HOME/Media/Pictures"
-XDG_PUBLICSHARE_DIR="\$HOME/Share"
-XDG_TEMPLATES_DIR="\$HOME/Code"
-XDG_VIDEOS_DIR="\$HOME/Media/Videos"
-EOF
-sleep 2
-echo -e "\n$CNT starting config home directory ........................"
-mkdir ~/Documents/go
-mkdir ~/{Media,Code,Shared}
-rm -rf ~/Templates/ ~/Public/
-sleep 2
-mv ~/Pictures/  ~/Music/  ~/Videos/  ~/Media/
-
 # docker config
 sleep 2
 echo -e "\n$CNT starting user join docker ........................"
 sudo usermod -aG docker $USER
-sleep 2
-
-# bash config
-echo -e "\n$CNT starting config bash ......................."
-sed -i '/PS1=/d' ~/.bashrc
-sleep 2
-cat << EOF >> ~/.bashrc
-parse_git_branch() {
-# git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1 )/'
-git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* [（头指针在 ]*\([0-9a-zA-Z+-\*/._=]*\)[ 分离）]*/ (\1 )/'
-}
-PS1='░▒▓\[\033[30;47;1m\]  \[\033[37;45m\] \W$(parse_git_branch)\[\033[0m\]\[\033[35m\]\[\033[0m\]'
-
-export GOPATH='/home/liu/Documents/go'
-export RUSTUP_DIST_SERVER="https://rsproxy.cn"
-export RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup"
-EOF
-sleep 2
-source ~/.bashrc
-
-# rust config
-sleep 2
-echo -e "\n$CNT starting config rust ........................"
-rustup default stable
-sleep 5
-mkdir ~/.cargo
-sleep 2
-cat << EOF > ~/.cargo/config
-[source.crates-io]
-replace-with = 'rsproxy-sparse'
-[source.rsproxy]
-registry = "https://rsproxy.cn/crates.io-index"
-[source.rsproxy-sparse]
-registry = "sparse+https://rsproxy.cn/index/"
-[registries.rsproxy]
-index = "https://rsproxy.cn/crates.io-index"
-[net]
-git-fetch-with-cli = true
-EOF
 sleep 2
 
 # setup v2raya
@@ -213,6 +151,7 @@ fi
 sleep 2
 
 # disable startup discover
+mkdir ~/.config/autostart
 cp /etc/xdg/autostart/org.kde.discover.notifier.desktop  ~/.config/autostart/
 cp /etc/xdg/autostart/kaccess.desktop  ~/.config/autostart/
 sleep 1
