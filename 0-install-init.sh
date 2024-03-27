@@ -62,32 +62,32 @@ echo -e "\n$CAC created subvolume done ...................."
 
 echo -e "\n$CNT starting mount ........................."
 sleep 2
-mount -o noatime,ssd,compress=zstd,nodiscard,subvol=@  /dev/nvme0n1p2  /mnt
+mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@  /dev/nvme0n1p2  /mnt
 echo -e "\n$CAC root mounted done ...................."
 
 sleep 2
 mount /dev/nvme0n1p1 /mnt/efi --mkdir
 echo -e "\n$CAC efi mounted done ...................."
 sleep 2
-mount -o noatime,ssd,compress=zstd,nodiscard,subvol=@home  /dev/nvme0n1p2  /mnt/home --mkdir
+mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@home  /dev/nvme0n1p2  /mnt/home --mkdir
 echo -e "\n$CAC home mounted done ...................."
 sleep 2
-mount -o noatime,ssd,compress=zstd,nodiscard,subvol=@cache  /dev/nvme0n1p2  /mnt/var/cache --mkdir
+mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@cache  /dev/nvme0n1p2  /mnt/var/cache --mkdir
 echo -e "\n$CAC cache mounted done ...................."
 sleep 2
-mount -o noatime,ssd,compress=zstd,nodiscard,subvol=@log  /dev/nvme0n1p2  /mnt/var/log --mkdir
+mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@log  /dev/nvme0n1p2  /mnt/var/log --mkdir
 echo -e "\n$CAC log mounted done ...................."
 # sleep 2
-# mount -o noatime,ssd,compress=zstd,nodiscard,subvol=@docker  /dev/nvme0n1p2  /mnt/var/lib/docker --mkdir
+# mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@docker  /dev/nvme0n1p2  /mnt/var/lib/docker --mkdir
 # echo -e "\n$CAC docker mounted done ...................."
 # sleep 2
-# mount -o noatime,ssd,compress=zstd,nodiscard,subvol=@libvirt  /dev/nvme0n1p2  /mnt/var/lib/libvirt --mkdir
+# mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@libvirt  /dev/nvme0n1p2  /mnt/var/lib/libvirt --mkdir
 # echo -e "\n$CAC libvirt mounted done ...................."
 # sleep 2
-# mount -o noatime,ssd,compress=zstd,nodiscard,subvol=@portables  /dev/nvme0n1p2  /mnt/var/lib/portables --mkdir
+# mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@portables  /dev/nvme0n1p2  /mnt/var/lib/portables --mkdir
 # echo -e "\n$CAC portables mounted done ...................."
 # sleep 2
-# mount -o noatime,ssd,compress=zstd,nodiscard,subvol=@machines  /dev/nvme0n1p2  /mnt/var/lib/machines --mkdir
+# mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@machines  /dev/nvme0n1p2  /mnt/var/lib/machines --mkdir
 echo -e "\n$CAC machines mounted done ...................."
 sleep 2
 
