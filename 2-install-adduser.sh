@@ -148,13 +148,6 @@ echo -e "\n$CNT install fcitx5 ........................."
 sleep 2
 pacman -S fcitx5-im fcitx5-chinese-addons fcitx5-pinyin-zhwiki fcitx5-pinyin-moegirl
 sleep 2
-cat >> /etc/environment << EOF
-GTK_IM_MODULE=fcitx
-QT_IM_MODULE=fcitx
-XMODIFIERS=@im=fcitx
-EOF
-echo -e "\n$CAC fcitx5 done ..................."
-sleep 2
 
  # fix fstab
 sed -i 's/subvolid=[0-9]\{3\}/nodiscard/g' /etc/fstab
