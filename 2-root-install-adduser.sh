@@ -21,72 +21,72 @@ sleep 1
 
 # set pacman
 echo -e "\n$CNT edit pacman.conf ..................."
-sleep 2
+sleep 1
 sed -i 's/#Color/Color/' /etc/pacman.conf
 sleep 1
 sed -i '/Color/a\\ILoveCandy' /etc/pacman.conf
 sleep 1
 sed -i 's/#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
-sleep 2
+sleep 1
 cat >> /etc/pacman.conf << EOF
 [archlinuxcn]
 Server = https://mirrors.ustc.edu.cn/archlinuxcn/\$arch
 Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/\$arch
 EOF
-sleep 2
+sleep 1
 pacman -Sy
-sleep 2
+sleep 1
 pacman-key --lsign-key "farseerfc@archlinux.org"
-sleep 2
+sleep 1
 pacman -S archlinuxcn-keyring
 echo -e "\n$CAC archlinuxcn done ..................."
-sleep 2
+sleep 1
 
 # if install keyring ERROR
 read -rep $'[\e[1;37mATTENTION\e[0m] - Is it successful to install ArchlinuxCn Key? (y,n) ' KEY
 if [[ $KEY == "N" || $KEY == "n" ]]; then
 echo -e "$CNT - Setup starting install archlinuxcn ..................."
 rm -rf /etc/pacman.d/gnupg
-sleep 2
+sleep 1
 pacman-key --init
-sleep 2
+sleep 1
 pacman-key --populate archlinux archlinuxcn
 echo -e "\n$CAC archlinuxcn done ..................."
-sleep 2
+sleep 1
 fi
 
 # install aur
 echo -e "\n$CNT install paru ................ln"
-sleep 2
+sleep 1
 pacman -S paru
-sleep 2
+sleep 1
 sed -i 's/#BottomUp/BottomUp/' /etc/paru.conf
 echo -e "\n$CAC paru conf done ..................."
-sleep 2
+sleep 1
 
 # add user
 echo -e "\n$CNT add user ............................."
-sleep 2
+sleep 1
 read -rep $'[\e[1;37mATTENTION\e[0m] - Please enter the user name: ' UUSER
 useradd -m -G wheel $UUSER
 read -rep $'[\e[1;37mATTENTION\e[0m] - Please enter the user password: ' PASSWD
 echo -e "${PASSWD}\n${PASSWD}" | passwd $UUSER
 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/g' /etc/sudoers
 echo -e "\n$CAC user done ..................."
-sleep 2
+sleep 1
 
 # add fonts
 echo -e "\n$CNT install fonts .........................."
 pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-noto-nerd
 echo -e "\n$CAC fonts done ..................."
-sleep 2
+sleep 1
 
 # add zram
 # read -rep $'[\e[1;37mATTENTION\e[0m] - Do you install zram? (y,n) ' ZRAM
 # if [[ $ZRAM == "Y" || $ZRAM == "y" ]]; then
 # echo -e "$CNT - Setup starting install zram .................."
 # pacman -S zram-generator
-# sleep 2
+# sleep 1
 # cat > /etc/systemd/zram-generator.conf << EOF
 # [zram0]
 # zram-size = ram / 2
@@ -94,14 +94,14 @@ sleep 2
 # swap-priority = 100
 # fs-type = swap
 # EOF
-# sleep 2
+# sleep 1
 # systemctl daemon-reload
-# sleep 2
+# sleep 1
 # systemctl start /dev/nvme0n1p2
 # # disable zswap, because kernel default enable zswap.
-# sleep 2
+# sleep 1
 # sed -i '/GRUB_CMDLINE_LINUX_DEFAULT=/s/.$/ zswap.enabled=0&/' /etc/default/grub
-# sleep 2
+# sleep 1
 
 # # Optimizing swap on zram
 # cat > /etc/sysctl.d/99-vm-zram-parameters.conf <<EOF
@@ -111,20 +111,20 @@ sleep 2
 # vm.page-cluster = 0
 # EOF
 # echo -e "\n$CAC zram done ..................."
-# sleep 2
+# sleep 1
 # fi
 
 # add pipewire
 echo -e "\n$CNT install pipewire ......................."
-sleep 2
+sleep 1
 pacman -S pipewire wireplumber pipewire-pulse gst-plugin-pipewire pipewire-alsa pipewire-audio pipewire-jack --needed
 echo -e "\n$CAC pipewire done ..................."
-sleep 2
+sleep 1
 
 # add Integrated graphics
 echo -e "\n$CNT starting install Integrated graphics Please select your cpu type ......................"
 pacman -S mesa libva-utils vulkan-icd-loader vulkan-tools
-sleep 2
+sleep 1
 select graphics in "cpu-intel" "cpu-amd"
 do
 	case $graphics in
@@ -141,17 +141,17 @@ do
 	esac
 done
 echo -e "\n$CAC Integrated graphics done ..................."
-sleep 2
+sleep 1
 
 # add fcitx5
 echo -e "\n$CNT install fcitx5 ........................."
-sleep 2
+sleep 1
 pacman -S fcitx5-im fcitx5-chinese-addons fcitx5-pinyin-zhwiki fcitx5-pinyin-moegirl
-sleep 2
+sleep 1
 
  # fix fstab
 sed -i 's/subvolid=[0-9]\{3\}/nodiscard/g' /etc/fstab
-sleep 2
+sleep 1
 
 # config network
 echo -e "\n$CNT starting config networkmanager ........................."
@@ -160,12 +160,12 @@ cat << EOF  > /etc/NetworkManager/conf.d/20-connectivity.conf
 enabled=false
 EOF
 echo -e "\n$CAC networkmanager done ..................."
-sleep 2
+sleep 1
 
 # setup paccache
 echo -e "\n$CNT starting setup paccache ........................"
 systemctl enable paccache.timer
-sleep 2
+sleep 1
 
 # startup net optimize
 cat << EOF  > /etc/sysctl.d/20-fast.conf
