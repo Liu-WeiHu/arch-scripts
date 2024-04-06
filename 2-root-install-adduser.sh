@@ -165,6 +165,7 @@ sleep 1
 # setup paccache
 echo -e "\n$CNT starting setup paccache ........................"
 systemctl enable paccache.timer
+echo -e "\n$CAC setup paccache done ..................."
 sleep 1
 
 # startup net optimize
@@ -178,9 +179,23 @@ net.core.default_qdisc = cake
 net.ipv4.tcp_congestion_control = bbr
 EOF
 sleep 1
-
 modprobe tcp_bbr
 sleep 1
+echo -e "\n$CAC configure net optimize done ..................."
+
+# configure btrfs swapfile
+btrfs filesystem mkswapfile --size 8g --uuid clear /swap/swapfile
+sleep 1
+swapon /swap/swapfile
+# edit fstab add swapfile
+cat << EOF >> /etc/fstab
+
+# swapfile
+/swap/swapfile none swap defaults 0 0
+EOF
+sleep 1
+echo -e "\n$CAC configure btrfs swapfile done ..................."
+
 
 # mv script to home
 mv ~/arch-scripts /home/$UUSER/
