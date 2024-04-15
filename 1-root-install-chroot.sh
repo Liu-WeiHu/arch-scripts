@@ -48,10 +48,6 @@ sleep 1
 cat > /etc/hosts << EOF
 127.0.0.1	     localhost
 ::1		         localhost
-
-185.199.111.133 raw.githubusercontent.com
-140.82.114.4 github.com
-185.199.108.133 objects.githubusercontent.com
 EOF
 echo -e "\n$CAC network done ..................."
 sleep 1
