@@ -10,9 +10,9 @@ CAC="[\e[1;33mACTION\e[0m]"
 
 # install desktop
 echo -e "\n$CNT install plasma-meta yakuake ............................."
-paru -S plasma-meta konsole sddm xdg-desktop-portal xdg-desktop-portal-kde xorg-xeyes  \
+paru -S plasma-meta konsole sddm xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-kde xorg-xeyes  \
         wl-clipboard spectacle plasma-wayland-protocols gwenview dolphin \
-        ark 7-zip-full unrar unarchiver kate google-chrome xray v2raya \
+        ark 7-zip-full unrar unarchiver kate google-chrome \
         libreoffice-still libreoffice-still-zh-cn \
         linuxqq visual-studio-code-bin wechat-universal-bwrap 
 sleep 1
@@ -20,11 +20,6 @@ sleep 1
 # setup sddm
 echo -e "\n$CNT starting setup sddm ........................"
 sudo systemctl enable sddm
-sleep 1
-
-# setup v2raya
-echo -e "\n$CNT starting setup v2raya ........................"
-sudo systemctl enable --now v2raya
 sleep 1
 
 # setup blue
