@@ -40,8 +40,8 @@ mount /dev/nvme0n1p2 /mnt
 
 sleep 1
 btrfs sub create /mnt/@
-sleep 1
-btrfs sub create /mnt/@home
+# sleep 1
+# btrfs sub create /mnt/@home
 sleep 1
 btrfs sub create /mnt/@cache
 sleep 1
@@ -49,6 +49,8 @@ btrfs sub create /mnt/@log
 sleep 1
 btrfs sub create /mnt/@swap
 sleep 1
+btrfs sub create /mnt/@pacman
+# sleep 1
 # btrfs sub create /mnt/@docker
 # sleep 1
 # btrfs sub create /mnt/@libvirt
@@ -70,11 +72,14 @@ echo -e "\n$CAC root mounted done ...................."
 sleep 1
 mount /dev/nvme0n1p1 /mnt/efi --mkdir
 echo -e "\n$CAC efi mounted done ...................."
-sleep 1
-mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@home  /dev/nvme0n1p2  /mnt/home --mkdir
-echo -e "\n$CAC home mounted done ...................."
+# sleep 1
+# mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@home  /dev/nvme0n1p2  /mnt/home --mkdir
+# echo -e "\n$CAC home mounted done ...................."
 sleep 1
 mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@cache  /dev/nvme0n1p2  /mnt/var/cache --mkdir
+echo -e "\n$CAC cache mounted done ...................."
+sleep 1
+mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@pacman  /dev/nvme0n1p2  /mnt/var/cache/pacman --mkdir
 echo -e "\n$CAC cache mounted done ...................."
 sleep 1
 mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@log  /dev/nvme0n1p2  /mnt/var/log --mkdir
