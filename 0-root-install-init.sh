@@ -125,7 +125,7 @@ sleep 1
 # install system
 echo -e "\n$CNT startings install system .........................."
 sleep 1
-pacstrap /mnt base base-devel linux linux-firmware btrfs-progs neovim networkmanager git pacman-contrib
+pacstrap /mnt base base-devel linux-cachyos linux-firmware btrfs-progs neovim networkmanager git pacman-contrib
 echo -e "\n$CAC install system done ...................."
 sleep 1
 

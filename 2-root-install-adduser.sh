@@ -184,7 +184,7 @@ sleep 1
 echo -e "\n$CAC configure net optimize done ..................."
 
 # configure btrfs swapfile
-btrfs filesystem mkswapfile --size 8g --uuid clear /swap/swapfile
+btrfs filesystem mkswapfile --size 16g --uuid clear /swap/swapfile
 sleep 1
 swapon /swap/swapfile
 # edit fstab add swapfile
