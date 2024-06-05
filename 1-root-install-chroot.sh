@@ -21,14 +21,16 @@ echo -e "\n$CAC zone time done ..................."
 sleep 1
 
 # add nvim -> vim and nvim -> vi
-read -rep $'[\e[1;37mATTENTION\e[0m] - Whether to add nvim -> vim and nvim -> vi soft links (y,n) ' NVIM
-if [[ $NVIM == "Y" || $NVIM == "y" ]]; then
-echo -e "$CNT - Setup starting nvim -> vim,vi ..............."
-ln -sf /usr/bin/nvim /usr/bin/vim
-ln -sf /usr/bin/nvim /usr/bin/vi
-echo -e "\n$CAC nvim done ..................."
+# read -rep $'[\e[1;37mATTENTION\e[0m] - Whether to add nvim -> vim and nvim -> vi soft links (y,n) ' NVIM
+# if [[ $NVIM == "Y" || $NVIM == "y" ]]; then
+# echo -e "$CNT - Setup starting nvim -> vim,vi ..............."
+# ln -sf /usr/bin/nvim /usr/bin/vim
+# ln -sf /usr/bin/nvim /usr/bin/vi
+# echo -e "\n$CAC nvim done ..................."
+# sleep 1
+# fi
+ln -sf /usr/bin/vim /usr/bin/vi
 sleep 1
-fi
 
 # set language
 echo -e "\n$CNT Setting Language .................."

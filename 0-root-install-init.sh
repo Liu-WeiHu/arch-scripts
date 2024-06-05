@@ -48,8 +48,6 @@ sleep 1
 btrfs sub create /mnt/@log
 sleep 1
 btrfs sub create /mnt/@swap
-sleep 1
-btrfs sub create /mnt/@pacman
 # sleep 1
 # btrfs sub create /mnt/@docker
 # sleep 1
@@ -77,9 +75,6 @@ echo -e "\n$CAC efi mounted done ...................."
 # echo -e "\n$CAC home mounted done ...................."
 sleep 1
 mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@cache  /dev/nvme0n1p2  /mnt/var/cache --mkdir
-echo -e "\n$CAC cache mounted done ...................."
-sleep 1
-mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@pacman  /dev/nvme0n1p2  /mnt/var/cache/pacman --mkdir
 echo -e "\n$CAC cache mounted done ...................."
 sleep 1
 mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@log  /dev/nvme0n1p2  /mnt/var/log --mkdir
@@ -125,7 +120,7 @@ sleep 1
 # install system
 echo -e "\n$CNT startings install system .........................."
 sleep 1
-pacstrap /mnt base base-devel linux-cachyos linux-firmware btrfs-progs neovim networkmanager git pacman-contrib
+pacstrap /mnt base base-devel linux linux-firmware btrfs-progs vim networkmanager git pacman-contrib
 echo -e "\n$CAC install system done ...................."
 sleep 1
 
