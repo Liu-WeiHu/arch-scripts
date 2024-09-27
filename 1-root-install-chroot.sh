@@ -21,16 +21,14 @@ echo -e "\n$CAC zone time done ..................."
 sleep 1
 
 # add nvim -> vim and nvim -> vi
-# read -rep $'[\e[1;37mATTENTION\e[0m] - Whether to add nvim -> vim and nvim -> vi soft links (y,n) ' NVIM
-# if [[ $NVIM == "Y" || $NVIM == "y" ]]; then
-# echo -e "$CNT - Setup starting nvim -> vim,vi ..............."
-# ln -sf /usr/bin/nvim /usr/bin/vim
-# ln -sf /usr/bin/nvim /usr/bin/vi
-# echo -e "\n$CAC nvim done ..................."
-# sleep 1
-# fi
-ln -sf /usr/bin/vim /usr/bin/vi
-sleep 1
+read -rep $'[\e[1;37mATTENTION\e[0m] - Whether to add nvim -> vim and nvim -> vi soft links (y,n) ' NVIM
+if [[ $NVIM == "Y" || $NVIM == "y" ]]; then
+    echo -e "$CNT - Setup starting nvim -> vim,vi ..............."
+    ln -sf /usr/bin/nvim /usr/bin/vim
+    ln -sf /usr/bin/nvim /usr/bin/vi
+    echo -e "\n$CAC nvim done ..................."
+    sleep 1
+fi
 
 # set language
 echo -e "\n$CNT Setting Language .................."
@@ -38,16 +36,16 @@ sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 sed -i 's/#zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
 sleep 1
-echo "LANG=en_US.UTF-8" > /etc/locale.conf
+echo "LANG=en_US.UTF-8" >/etc/locale.conf
 echo -e "\n$CAC language done ..................."
 sleep 1
 
 # set network
 echo -e "\n$CNT Setting Network ..............."
 sleep 1
-echo Arch > /etc/hostname
+echo Arch >/etc/hostname
 sleep 1
-cat > /etc/hosts << EOF
+cat >/etc/hosts <<EOF
 127.0.0.1	     localhost
 ::1		         localhost
 EOF
@@ -68,27 +66,27 @@ sleep 1
 # set fstrim
 read -rep $'[\e[1;37mATTENTION\e[0m] - Do you need to open fstrim serve? (y,n) ' FSTRIM
 if [[ $FSTRIM == "Y" || $FSTRIM == "y" ]]; then
-systemctl enable fstrim.timer
-echo -e "\n$CAC fstrim done ..................."
-sleep 1
+    systemctl enable fstrim.timer
+    echo -e "\n$CAC fstrim done ..................."
+    sleep 1
 fi
 
 # install ucode
 echo -e "\n$CNT starting install ucode Please select your cpu type ......................"
-select name in "cpu-intel" "cpu-amd"
-do
-	case $name in
-		"cpu-intel")
-			pacman -S intel-ucode
-			break
-			;;
-		"cpu-amd")
-			pacman -S amd-ucode
-			break
-			;;
-		*)
-			echo "Input error, please retype"
-	esac
+select name in "cpu-intel" "cpu-amd"; do
+    case $name in
+    "cpu-intel")
+        pacman -S intel-ucode
+        break
+        ;;
+    "cpu-amd")
+        pacman -S amd-ucode
+        break
+        ;;
+    *)
+        echo "Input error, please retype"
+        ;;
+    esac
 done
 echo -e "\n$CAC ucode done ..................."
 sleep 1
@@ -99,11 +97,11 @@ pacman -S grub efibootmgr
 sleep 1
 read -rep $'[\e[1;37mATTENTION\e[0m] - Do you want to probe other systems? (y,n) ' PROBE
 if [[ $PROBE == "Y" || $PROBE == "y" ]]; then
-echo -e "$CNT - setting probe ...................."
-sed -i 's/#GRUB_DISABLE_OS_PROBER=false/GRUB_DISABLE_OS_PROBER=false/' /etc/default/grub
-sleep 1
-pacman -S os-prober
-echo -e "\n$CAC probe done ..................."
+    echo -e "$CNT - setting probe ...................."
+    sed -i 's/#GRUB_DISABLE_OS_PROBER=false/GRUB_DISABLE_OS_PROBER=false/' /etc/default/grub
+    sleep 1
+    pacman -S os-prober
+    echo -e "\n$CAC probe done ..................."
 fi
 sleep 1
 sed -i '/GRUB_CMDLINE_LINUX_DEFAULT=/c\GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"' /etc/default/grub

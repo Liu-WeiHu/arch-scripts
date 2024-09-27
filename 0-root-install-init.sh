@@ -18,7 +18,6 @@ timedatectl set-timezone Asia/Shanghai
 echo -e "\n$CAC timedate done ...................."
 sleep 1
 
-
 # mkfs
 echo -e "\n$CNT starting mkfs ....................."
 sleep 1
@@ -64,7 +63,7 @@ echo -e "\n$CAC created subvolume done ...................."
 
 echo -e "\n$CNT starting mount ........................."
 sleep 1
-mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@  /dev/nvme0n1p2  /mnt
+mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@ /dev/nvme0n1p2 /mnt
 echo -e "\n$CAC root mounted done ...................."
 
 sleep 1
@@ -74,13 +73,13 @@ echo -e "\n$CAC efi mounted done ...................."
 # mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@home  /dev/nvme0n1p2  /mnt/home --mkdir
 # echo -e "\n$CAC home mounted done ...................."
 sleep 1
-mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@cache  /dev/nvme0n1p2  /mnt/var/cache --mkdir
+mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@cache /dev/nvme0n1p2 /mnt/var/cache --mkdir
 echo -e "\n$CAC cache mounted done ...................."
 sleep 1
-mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@log  /dev/nvme0n1p2  /mnt/var/log --mkdir
+mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@log /dev/nvme0n1p2 /mnt/var/log --mkdir
 echo -e "\n$CAC log mounted done ...................."
 sleep 1
-mount -o defaults,subvol=@swap /dev/nvme0n1p2  /mnt/swap --mkdir
+mount -o defaults,subvol=@swap /dev/nvme0n1p2 /mnt/swap --mkdir
 echo -e "\n$CAC swap mounted done ...................."
 sleep 1
 # sleep 1
@@ -101,7 +100,6 @@ lsblk
 
 sleep 5
 
-
 # disable reflector
 echo -e "\n$CNT uninstall reflector ........................"
 pacman -Rsnu reflector --noconfirm
@@ -109,7 +107,7 @@ echo -e "\n$CAC uninstall reflector done ...................."
 sleep 1
 
 echo -e "\n$CNT fix mirrorlist ........................."
-cat > /etc/pacman.d/mirrorlist << EOF
+cat >/etc/pacman.d/mirrorlist <<EOF
 Server=https://mirrors.ustc.edu.cn/archlinux/\$repo/os/\$arch
 Server=https://mirrors.tuna.tsinghua.edu.cn/archlinux/\$repo/os/\$arch
 EOF
@@ -120,13 +118,13 @@ sleep 1
 # install system
 echo -e "\n$CNT startings install system .........................."
 sleep 1
-pacstrap /mnt base base-devel linux linux-firmware btrfs-progs vim networkmanager git pacman-contrib
+pacstrap /mnt base base-devel linux linux-firmware btrfs-progs neovim networkmanager pacman-contrib
 echo -e "\n$CAC install system done ...................."
 sleep 1
 
 # gen fstab
 echo -e "\n$CNT generator fstab  ......................"
-genfstab -U /mnt > /mnt/etc/fstab
+genfstab -U /mnt >/mnt/etc/fstab
 echo -e "\n$CAC gen fstab done ...................."
 sleep 1
 

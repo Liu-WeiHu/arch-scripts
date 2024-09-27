@@ -9,15 +9,14 @@ CWR="[\e[1;35mWARNING\e[0m]"
 CAC="[\e[1;33mACTION\e[0m]"
 
 # check network
-ping -c 3 www.baidu.com > /dev/null
+ping -c 3 www.baidu.com >/dev/null
 if [ $? -eq 0 ]; then
-echo -e "\n$COK network connected..................."
+    echo -e "\n$COK network connected..................."
 else
-echo -e "\n$CER network not connected, You must connect network ......."
-exit 1
+    echo -e "\n$CER network not connected, You must connect network ......."
+    exit 1
 fi
 sleep 1
-
 
 # set pacman
 echo -e "\n$CNT edit pacman.conf ..................."
@@ -28,7 +27,7 @@ sed -i '/Color/a\\ILoveCandy' /etc/pacman.conf
 sleep 1
 sed -i 's/#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
 sleep 1
-cat >> /etc/pacman.conf << EOF
+cat >>/etc/pacman.conf <<EOF
 [archlinuxcn]
 Server = https://mirrors.ustc.edu.cn/archlinuxcn/\$arch
 Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/\$arch
@@ -45,14 +44,14 @@ sleep 1
 # if install keyring ERROR
 read -rep $'[\e[1;37mATTENTION\e[0m] - Is it successful to install ArchlinuxCn Key? (y,n) ' KEY
 if [[ $KEY == "N" || $KEY == "n" ]]; then
-echo -e "$CNT - Setup starting install archlinuxcn ..................."
-rm -rf /etc/pacman.d/gnupg
-sleep 1
-pacman-key --init
-sleep 1
-pacman-key --populate archlinux archlinuxcn
-echo -e "\n$CAC archlinuxcn done ..................."
-sleep 1
+    echo -e "$CNT - Setup starting install archlinuxcn ..................."
+    rm -rf /etc/pacman.d/gnupg
+    sleep 1
+    pacman-key --init
+    sleep 1
+    pacman-key --populate archlinux archlinuxcn
+    echo -e "\n$CAC archlinuxcn done ..................."
+    sleep 1
 fi
 
 # install aur
@@ -77,7 +76,7 @@ sleep 1
 
 # add fonts
 echo -e "\n$CNT install fonts .........................."
-pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-noto-nerd
+pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-noto-nerd ttf-nerd-fonts-symbols ttf-nerd-fonts-symbols-mono ttf-lxgw-wenkai ttf-lxgw-wenkai-mono
 echo -e "\n$CAC fonts done ..................."
 sleep 1
 
@@ -125,20 +124,20 @@ sleep 1
 echo -e "\n$CNT starting install Integrated graphics Please select your cpu type ......................"
 pacman -S mesa libva-utils vulkan-icd-loader vulkan-tools
 sleep 1
-select graphics in "cpu-intel" "cpu-amd"
-do
-	case $graphics in
-		"cpu-intel")
-			pacman -S intel-media-driver vulkan-intel  
-			break
-			;;
-		"cpu-amd")
-			pacman -S libva-mesa-driver vulkan-radeon 
-			break
-			;;
-		*)
-			echo "Input error, please retype"
-	esac
+select graphics in "cpu-intel" "cpu-amd"; do
+    case $graphics in
+    "cpu-intel")
+        pacman -S intel-media-driver vulkan-intel
+        break
+        ;;
+    "cpu-amd")
+        pacman -S libva-mesa-driver vulkan-radeon
+        break
+        ;;
+    *)
+        echo "Input error, please retype"
+        ;;
+    esac
 done
 echo -e "\n$CAC Integrated graphics done ..................."
 sleep 1
@@ -149,13 +148,13 @@ sleep 1
 pacman -S fcitx5-im fcitx5-chinese-addons fcitx5-pinyin-zhwiki fcitx5-pinyin-moegirl
 sleep 1
 
- # fix fstab
+# fix fstab
 sed -i 's/subvolid=[0-9]\{3\}/nodiscard/g' /etc/fstab
 sleep 1
 
 # config network
 echo -e "\n$CNT starting config networkmanager ........................."
-cat << EOF  > /etc/NetworkManager/conf.d/20-connectivity.conf
+cat <<EOF >/etc/NetworkManager/conf.d/20-connectivity.conf
 [connectivity]
 enabled=false
 EOF
@@ -169,12 +168,12 @@ echo -e "\n$CAC setup paccache done ..................."
 sleep 1
 
 # startup net optimize
-cat << EOF  > /etc/sysctl.d/20-fast.conf
+cat <<EOF >/etc/sysctl.d/20-fast.conf
 net.ipv4.tcp_fastopen = 3
 EOF
 sleep 1
 
-cat << EOF  > /etc/sysctl.d/30-bbr.conf
+cat <<EOF >/etc/sysctl.d/30-bbr.conf
 net.core.default_qdisc = cake
 net.ipv4.tcp_congestion_control = bbr
 EOF
@@ -188,7 +187,7 @@ btrfs filesystem mkswapfile --size 16g --uuid clear /swap/swapfile
 sleep 1
 swapon /swap/swapfile
 # edit fstab add swapfile
-cat << EOF >> /etc/fstab
+cat <<EOF >>/etc/fstab
 
 # swapfile
 /swap/swapfile none swap defaults 0 0
@@ -196,9 +195,7 @@ EOF
 sleep 1
 echo -e "\n$CAC configure btrfs swapfile done ..................."
 
-
 # mv script to home
 mv ~/arch-scripts /home/$UUSER/
 
 echo -e "\n$COK Has been completed. >>>>>>>>>>>>>>>>>  Check fstab, df, lsblk \n"
-
