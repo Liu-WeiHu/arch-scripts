@@ -24,7 +24,7 @@ sleep 1
 read -rep $'[\e[1;37mATTENTION\e[0m] - Whether to add nvim -> vim and nvim -> vi soft links (y,n) ' NVIM
 if [[ $NVIM == "Y" || $NVIM == "y" ]]; then
     echo -e "$CNT - Setup starting nvim -> vim,vi ..............."
-    ln -sf /usr/bin/nvim /usr/bin/vim
+    # ln -sf /usr/bin/nvim /usr/bin/vim
     ln -sf /usr/bin/nvim /usr/bin/vi
     echo -e "\n$CAC nvim done ..................."
     sleep 1

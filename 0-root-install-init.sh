@@ -129,7 +129,7 @@ echo -e "\n$CAC gen fstab done ...................."
 sleep 1
 
 # mv script
-mv arch-scripts /mnt/root/
+mv ~/arch-scripts /mnt/root/
 
 # chroot /mnt
 echo -e "\n$COK Has been completed. Please >>>>>>>>>>>>>>>> arch-chroot /mnt \n"
