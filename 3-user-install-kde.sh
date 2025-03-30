@@ -10,11 +10,10 @@ CAC="[\e[1;33mACTION\e[0m]"
 
 # install desktop
 echo -e "\n$CNT install plasma-meta yakuake ............................."
-paru -S plasma-meta konsole sddm xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-kde xorg-xeyes  \
-        wl-clipboard spectacle plasma-wayland-protocols gwenview dolphin \
-        ark 7-zip-full unrar unarchiver kate google-chrome \
-        libreoffice-still libreoffice-still-zh-cn \
-        linuxqq visual-studio-code-bin wechat-universal-bwrap 
+paru -S plasma-meta konsole sddm xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-kde xorg-xeyes \
+    wl-clipboard spectacle plasma-wayland-protocols gwenview dolphin \
+    ark 7zip unrar unarchiver kate google-chrome \
+    libreoffice-still libreoffice-still-zh-cn
 sleep 1
 
 # setup sddm
@@ -38,18 +37,18 @@ sleep 1
 
 # disable startup discover
 mkdir ~/.config/autostart
-cp /etc/xdg/autostart/org.kde.discover.notifier.desktop  ~/.config/autostart/
-cp /etc/xdg/autostart/kaccess.desktop  ~/.config/autostart/
+cp /etc/xdg/autostart/org.kde.discover.notifier.desktop ~/.config/autostart/
+cp /etc/xdg/autostart/kaccess.desktop ~/.config/autostart/
 sleep 1
-echo Hidden=True >> ~/.config/autostart/org.kde.discover.notifier.desktop
-echo Hidden=True >> ~/.config/autostart/kaccess.desktop
+echo Hidden=True >>~/.config/autostart/org.kde.discover.notifier.desktop
+echo Hidden=True >>~/.config/autostart/kaccess.desktop
 sleep 1
 echo -e "\n$CAC disable startup discover done ..................."
 
 # set fcitx env
 mkdir ~/.config/environment.d
 sleep 1
-cat << EOF > ~/.config/environment.d/env.conf
+cat <<EOF >~/.config/environment.d/env.conf
 GTK_IM_MODULE=fcitx
 QT_IM_MODULE=fcitx
 XMODIFIERS=@im=fcitx
