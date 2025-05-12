@@ -75,7 +75,7 @@ echo -e "\n$CAC 用户添加完成"
 
 # 安装字体
 echo -e "\n$CNT 安装字体..."
-pacman -S --noconfirm noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-nerd-fonts-symbols ttf-nerd-fonts-symbols-mono ttf-lxgw-wenkai ttf-lxgw-wenkai-mono ttf-twemoji
+pacman -S --noconfirm noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-nerd-fonts-symbols ttf-nerd-fonts-symbols-mono ttf-twemoji
 echo -e "\n$CAC 字体安装完成"
 
 # 安装音频系统
