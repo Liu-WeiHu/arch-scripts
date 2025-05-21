@@ -251,8 +251,8 @@ EOF
     echo -e "\n$CNT Installing and configuring GRUB..."
     pacman -S --noconfirm grub efibootmgr
 
-    read -rep $'[\e[1;37mATTENTION\e[0m] - Detect other operating systems (default: n)? (y/n) ' PROBE
-    PROBE=${PROBE:-n}
+    read -rep $'[\e[1;37mATTENTION\e[0m] - Detect other operating systems (default: y)? (y/n) ' PROBE
+    PROBE=${PROBE:-y}
     if [[ $PROBE == "Y" || $PROBE == "y" ]]; then
         echo -e "$CNT Configuring OS prober..."
         sed -i 's/#GRUB_DISABLE_OS_PROBER=false/GRUB_DISABLE_OS_PROBER=false/' /etc/default/grub
