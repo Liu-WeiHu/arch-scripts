@@ -8,30 +8,30 @@ CAT="[\e[1;37mATTENTION\e[0m]"
 CWR="[\e[1;35mWARNING\e[0m]"
 CAC="[\e[1;33mACTION\e[0m]"
 
-# 检查是否以root用户运行
+# Check if running as root
 if [ "$(id -u)" -ne 0 ]; then
-    echo -e "\n$CER 请以root用户运行此脚本！"
+    echo -e "\n$CER Please run this script as root!"
     exit 1
 fi
 
-# 检查网络连接
-echo -e "\n$CNT 检查网络连接..."
+# Check network connection
+echo -e "\n$CNT Checking network connection..."
 ping -c 3 www.baidu.com >/dev/null
 if [ $? -eq 0 ]; then
-    echo -e "\n$COK 网络已连接"
+    echo -e "\n$COK Network connected"
 else
-    echo -e "\n$CER 网络未连接，请先连接网络后再运行此脚本！"
-    echo -e "    提示：您可以使用 nmtui 或 nmcli 配置网络连接"
+    echo -e "\n$CER Network not connected, please connect to the network before running this script!"
+    echo -e "    Tip: You can use nmtui or nmcli to configure network connection"
     exit 1
 fi
 
-# 配置 pacman
-echo -e "\n$CNT 配置 pacman..."
+# Configure pacman
+echo -e "\n$CNT Configuring pacman..."
 sed -i 's/#Color/Color/' /etc/pacman.conf
 sed -i '/Color/a\\ILoveCandy' /etc/pacman.conf
 sed -i 's/#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
 
-# 添加 archlinuxcn 源
+# Add archlinuxcn repository
 cat >>/etc/pacman.conf <<EOF
 
 [archlinuxcn]
@@ -39,52 +39,52 @@ Server = https://mirrors.ustc.edu.cn/archlinuxcn/\$arch
 Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/\$arch
 EOF
 
-# 更新系统并安装 archlinuxcn-keyring
-echo -e "\n$CNT 更新系统并安装 archlinuxcn 密钥..."
+# Update system and install archlinuxcn-keyring
+echo -e "\n$CNT Updating system and installing archlinuxcn keys..."
 pacman -Sy
 pacman-key --lsign-key "farseerfc@archlinux.org" || true
 pacman -S --noconfirm archlinuxcn-keyring || true
 
-# 如果密钥安装失败，则重新初始化密钥
-read -rep $'[\e[1;37mATTENTION\e[0m] - ArchlinuxCn 密钥安装是否成功？(y/n) ' KEY
+# If key installation fails, reinitialize keys
+read -rep $'[\e[1;37mATTENTION\e[0m] - Was ArchlinuxCn key installation successful? (y/n) ' KEY
 if [[ $KEY == "N" || $KEY == "n" ]]; then
-    echo -e "$CNT 重新初始化密钥..."
+    echo -e "$CNT Reinitializing keys..."
     rm -rf /etc/pacman.d/gnupg
     pacman-key --init
     pacman-key --populate archlinux archlinuxcn
-    echo -e "\n$CAC 密钥初始化完成"
+    echo -e "\n$CAC Key initialization completed"
 fi
 
-# 安装 AUR 助手
-echo -e "\n$CNT 安装 paru..."
+# Install AUR helper
+echo -e "\n$CNT Installing paru..."
 pacman -S --noconfirm paru
 sed -i 's/#BottomUp/BottomUp/' /etc/paru.conf
-echo -e "\n$CAC paru 安装配置完成"
+echo -e "\n$CAC paru installation and configuration completed"
 
-# 添加用户
-echo -e "\n$CNT 添加用户..."
-read -rep $'[\e[1;37mATTENTION\e[0m] - 请输入用户名: ' UUSER
+# Add user
+echo -e "\n$CNT Adding user..."
+read -rep $'[\e[1;37mATTENTION\e[0m] - Please enter username: ' UUSER
 useradd -m -G wheel $UUSER
 
-read -rep $'[\e[1;37mATTENTION\e[0m] - 请输入用户密码: ' PASSWD
+read -rep $'[\e[1;37mATTENTION\e[0m] - Please enter user password: ' PASSWD
 echo -e "${PASSWD}\n${PASSWD}" | passwd $UUSER
 
-# 配置 sudo 权限
+# Configure sudo permissions
 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/g' /etc/sudoers
-echo -e "\n$CAC 用户添加完成"
+echo -e "\n$CAC User added successfully"
 
-# 安装字体
-echo -e "\n$CNT 安装字体..."
+# Install fonts
+echo -e "\n$CNT Installing fonts..."
 pacman -S --noconfirm noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-nerd-fonts-symbols ttf-nerd-fonts-symbols-mono ttf-twemoji
-echo -e "\n$CAC 字体安装完成"
+echo -e "\n$CAC Fonts installation completed"
 
-# 安装音频系统
-echo -e "\n$CNT 安装 pipewire 音频系统..."
+# Install audio system
+echo -e "\n$CNT Installing pipewire audio system..."
 pacman -S --noconfirm pipewire wireplumber pipewire-pulse gst-plugin-pipewire pipewire-alsa pipewire-audio pipewire-jack
-echo -e "\n$CAC pipewire 安装完成"
+echo -e "\n$CAC pipewire installation completed"
 
-# 安装集成显卡驱动
-echo -e "\n$CNT 安装集成显卡驱动..."
+# Install integrated graphics drivers
+echo -e "\n$CNT Installing integrated graphics drivers..."
 pacman -S --noconfirm mesa libva-utils vulkan-icd-loader vulkan-tools
 
 select graphics in "cpu-intel" "cpu-amd"; do
@@ -98,37 +98,37 @@ select graphics in "cpu-intel" "cpu-amd"; do
         break
         ;;
     *)
-        echo "输入错误，请重新输入"
+        echo "Invalid input, please try again"
         ;;
     esac
 done
-echo -e "\n$CAC 显卡驱动安装完成"
+echo -e "\n$CAC Graphics drivers installation completed"
 
-# 安装输入法
-echo -e "\n$CNT 安装中文输入法..."
+# Install input method
+echo -e "\n$CNT Installing Chinese input method..."
 pacman -S --noconfirm fcitx5-im fcitx5-chinese-addons fcitx5-pinyin-zhwiki fcitx5-pinyin-moegirl
 
-# 修复 fstab
-echo -e "\n$CNT 优化 fstab..."
+# Fix fstab
+echo -e "\n$CNT Optimizing fstab..."
 sed -i 's/subvolid=[0-9]\{3\}/nodiscard/g' /etc/fstab
-echo -e "\n$CAC fstab 优化完成"
+echo -e "\n$CAC fstab optimization completed"
 
-# 配置网络管理器
-echo -e "\n$CNT 配置 NetworkManager..."
+# Configure network manager
+echo -e "\n$CNT Configuring NetworkManager..."
 mkdir -p /etc/NetworkManager/conf.d/
 cat <<EOF >/etc/NetworkManager/conf.d/20-connectivity.conf
 [connectivity]
 enabled=false
 EOF
-echo -e "\n$CAC NetworkManager 配置完成"
+echo -e "\n$CAC NetworkManager configuration completed"
 
-# 设置包缓存清理
-echo -e "\n$CNT 设置自动清理包缓存..."
+# Setup package cache cleaning
+echo -e "\n$CNT Setting up automatic package cache cleaning..."
 systemctl enable paccache.timer
-echo -e "\n$CAC 包缓存清理设置完成"
+echo -e "\n$CAC Package cache cleaning setup completed"
 
-# 网络优化
-echo -e "\n$CNT 优化网络设置..."
+# Network optimization
+echo -e "\n$CNT Optimizing network settings..."
 cat <<EOF >/etc/sysctl.d/20-fast.conf
 net.ipv4.tcp_fastopen = 3
 EOF
@@ -139,41 +139,41 @@ net.ipv4.tcp_congestion_control = bbr
 EOF
 
 modprobe tcp_bbr
-echo -e "\n$CAC 网络优化配置完成"
+echo -e "\n$CAC Network optimization configuration completed"
 
-# 配置 btrfs swapfile
-echo -e "\n$CNT 创建 swap 文件..."
-read -rep $'[\e[1;37mATTENTION\e[0m] - 请输入 swap 文件大小 (单位: GB，默认: 16): ' SWAP_SIZE
+# Configure btrfs swapfile
+echo -e "\n$CNT Creating swap file..."
+read -rep $'[\e[1;37mATTENTION\e[0m] - Please enter swap file size (in GB, default: 16): ' SWAP_SIZE
 SWAP_SIZE=${SWAP_SIZE:-16}
 
 btrfs filesystem mkswapfile --size ${SWAP_SIZE}g --uuid clear /swap/swapfile
 swapon /swap/swapfile
 
-# 更新 fstab 添加 swapfile
+# Update fstab to add swapfile
 cat <<EOF >>/etc/fstab
 
 # swapfile
 /swap/swapfile none swap defaults 0 0
 EOF
-echo -e "\n$CAC swap 文件配置完成"
+echo -e "\n$CAC Swap file configuration completed"
 
-# 将脚本移动到用户目录
+# Move scripts to user directory
 if [ -d /root/arch-scripts ]; then
     cp -r /root/arch-scripts /home/$UUSER/
     chown -R $UUSER:$UUSER /home/$UUSER/arch-scripts
 fi
 
-echo -e "\n$COK 系统配置完成！以下是系统信息："
-echo -e "\n文件系统挂载情况："
+echo -e "\n$COK System configuration completed! System information:"
+echo -e "\nFilesystem mount status:"
 df -h
 
-echo -e "\n分区情况："
+echo -e "\nPartition status:"
 lsblk
 
-echo -e "\n$CAT 您已成功安装 Arch Linux，请使用以下命令重启系统："
+echo -e "\n$CAT You have successfully installed Arch Linux, please use the following commands to reboot:"
 echo -e "    exit"
 echo -e "    umount -R /mnt"
 echo -e "    reboot"
 
-# 标记用户配置完成
+# Mark user configuration as completed
 touch /root/.user_setup_completed

@@ -8,61 +8,61 @@ CAT="[\e[1;37mATTENTION\e[0m]"
 CWR="[\e[1;35mWARNING\e[0m]"
 CAC="[\e[1;33mACTION\e[0m]"
 
-# 检查是否以root用户运行
+# Check if running as root
 if [ "$(id -u)" -ne 0 ]; then
-    echo -e "\n$CER 请以root用户运行此脚本！"
+    echo -e "\n$CER Please run this script as root!"
     exit 1
 fi
 
-# 检查是否在安装环境中
+# Check if in chroot environment
 IN_CHROOT=0
 if [ -f /mnt/etc/fstab ] && ! [ -f /mnt/root/.chroot_completed ]; then
-    echo -e "\n$CAT 检测到您可能已进入 chroot 环境。"
-    read -rep $'是否继续执行 chroot 部分的安装流程？ (y/n) ' CONTINUE_CHROOT
+    echo -e "\n$CAT Detected you may have entered the chroot environment."
+    read -rep $'Continue with the chroot part of the installation? (y/n) ' CONTINUE_CHROOT
     if [[ $CONTINUE_CHROOT == "Y" || $CONTINUE_CHROOT == "y" ]]; then
         IN_CHROOT=1
     else
-        echo -e "\n$CER 脚本已终止！"
+        echo -e "\n$CER Script terminated!"
         exit 1
     fi
 fi
 
-# 主安装函数
+# Main installation function
 main_install() {
-    # 设置时间日期
-    echo -e "\n$CNT 正在设置系统时间..."
+    # Set date and time
+    echo -e "\n$CNT Setting up system time..."
     timedatectl set-ntp true
     timedatectl set-timezone Asia/Shanghai
-    echo -e "\n$CAC 时间设置完成"
+    echo -e "\n$CAC Time setup completed"
 
-    # 询问分区
-    echo -e "\n$CAT 请确认您已使用 cfdisk 完成磁盘分区，并已创建然后使用 lsblk 查看分区磁盘:"
-    echo -e "   - EFI 分区 (建议 100MB)         举例：/dev/nvme0n1p1     /dev是固定的开头"
-    echo -e "   - 根分区剩下的全部磁盘给根分区  举例：/dev/nvme0n1p2     /dev是固定的开头"
-    read -rep $'确认已完成分区？ (y/n) ' PARTITION_CONFIRMED
+    # Ask about partitioning
+    echo -e "\n$CAT Please confirm you have completed disk partitioning with cfdisk and created then viewed partitions with lsblk:"
+    echo -e "   - EFI partition (recommended 100MB)     Example: /dev/nvme0n1p1     /dev is the fixed prefix"
+    echo -e "   - Root partition with remaining space   Example: /dev/nvme0n1p2     /dev is the fixed prefix"
+    read -rep $'Confirm partitioning is completed? (y/n) ' PARTITION_CONFIRMED
     if [[ $PARTITION_CONFIRMED != "Y" && $PARTITION_CONFIRMED != "y" ]]; then
-        echo -e "\n$CER 请先完成分区，然后再运行此脚本！"
+        echo -e "\n$CER Please complete partitioning first, then run this script!"
         exit 1
     fi
 
-    # 格式化分区
-    read -rep $'请输入EFI分区的磁盘名比如：nvme0n1p1 不要有空格和斜杠 ' PARTITION_EFI
-    read -rep $'请输入根分区的磁盘名比如：nvme0n1p2 不要有空格和斜杠 ' PARTITION_ROOT
-    echo -e "\n$CNT 开始格式化分区..."
+    # Format partitions
+    read -rep $'Please enter the EFI partition name (e.g. nvme0n1p1) without spaces or slashes: ' PARTITION_EFI
+    read -rep $'Please enter the root partition name (e.g. nvme0n1p2) without spaces or slashes: ' PARTITION_ROOT
+    echo -e "\n$CNT Starting partition formatting..."
     mkfs.fat -F32 /dev/$PARTITION_EFI
-    echo -e "\n$CAC EFI分区格式化完成"
+    echo -e "\n$CAC EFI partition formatting completed"
 
-    read -rep $'[\e[1;37mATTENTION\e[0m] - 是否需要使用RAID配置(单磁盘不需要)? (y/n) ' USE_RAID
+    read -rep $'[\e[1;37mATTENTION\e[0m] - Do you need RAID configuration (not needed for single disk)? (y/n) ' USE_RAID
     if [[ $USE_RAID == "Y" || $USE_RAID == "y" ]]; then
-        read -rep $'请输入RAID配置参数 (例如: -d raid0 -m raid1): ' RAID_PARAMS
+        read -rep $'Please enter RAID parameters (e.g.: -d raid0 -m raid1): ' RAID_PARAMS
         mkfs.btrfs -f -L "MyArch" --checksum xxhash $RAID_PARAMS /dev/$PARTITION_ROOT
     else
         mkfs.btrfs -f -L "MyArch" --checksum xxhash /dev/$PARTITION_ROOT
     fi
-    echo -e "\n$CAC 根分区格式化完成"
+    echo -e "\n$CAC Root partition formatting completed"
 
-    # 创建子卷
-    echo -e "\n$CNT 创建 Btrfs 子卷..."
+    # Create subvolumes
+    echo -e "\n$CNT Creating Btrfs subvolumes..."
     mount /dev/$PARTITION_ROOT /mnt
 
     btrfs sub create /mnt/@
@@ -70,7 +70,7 @@ main_install() {
     btrfs sub create /mnt/@log
     btrfs sub create /mnt/@swap
 
-    read -rep $'[\e[1;37mATTENTION\e[0m] - 是否创建独立的 home 子卷? (y/n) ' CREATE_HOME
+    read -rep $'[\e[1;37mATTENTION\e[0m] - Create separate home subvolume? (y/n) ' CREATE_HOME
     if [[ $CREATE_HOME == "Y" || $CREATE_HOME == "y" ]]; then
         btrfs sub create /mnt/@home
         MOUNT_HOME=1
@@ -79,40 +79,40 @@ main_install() {
     fi
 
     umount /mnt
-    echo -e "\n$CAC 子卷创建完成"
+    echo -e "\n$CAC Subvolume creation completed"
 
-    # 挂载文件系统
-    echo -e "\n$CNT 开始挂载文件系统..."
+    # Mount filesystems
+    echo -e "\n$CNT Mounting filesystems..."
     mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@ /dev/$PARTITION_ROOT /mnt
-    echo -e "\n$CAC 根分区挂载完成"
+    echo -e "\n$CAC Root partition mounted"
 
     mkdir -p /mnt/efi
     mount /dev/$PARTITION_EFI /mnt/efi
-    echo -e "\n$CAC EFI分区挂载完成"
+    echo -e "\n$CAC EFI partition mounted"
 
     if [ $MOUNT_HOME -eq 1 ]; then
         mkdir -p /mnt/home
         mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@home /dev/$PARTITION_ROOT /mnt/home
-        echo -e "\n$CAC home分区挂载完成"
+        echo -e "\n$CAC Home partition mounted"
     fi
 
     mkdir -p /mnt/var/cache
     mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@cache /dev/$PARTITION_ROOT /mnt/var/cache
-    echo -e "\n$CAC cache分区挂载完成"
+    echo -e "\n$CAC Cache partition mounted"
 
     mkdir -p /mnt/var/log
     mount -o noatime,ssd,compress-force=zstd,nodiscard,subvol=@log /dev/$PARTITION_ROOT /mnt/var/log
-    echo -e "\n$CAC log分区挂载完成"
+    echo -e "\n$CAC Log partition mounted"
 
     mkdir -p /mnt/swap
     mount -o defaults,subvol=@swap /dev/$PARTITION_ROOT /mnt/swap
-    echo -e "\n$CAC swap分区挂载完成"
+    echo -e "\n$CAC Swap partition mounted"
 
     lsblk
     sleep 3
 
-    # 配置镜像源
-    echo -e "\n$CNT 配置镜像源..."
+    # Configure mirrors
+    echo -e "\n$CNT Configuring mirrors..."
     pacman -Sy --noconfirm
     pacman -Rsnu reflector --noconfirm || true
 
@@ -120,25 +120,25 @@ main_install() {
 Server=https://mirrors.ustc.edu.cn/archlinux/\$repo/os/\$arch
 Server=https://mirrors.tuna.tsinghua.edu.cn/archlinux/\$repo/os/\$arch
 EOF
-    echo -e "\n$CAC 镜像源配置完成"
+    echo -e "\n$CAC Mirrors configuration completed"
 
-    # 安装基本系统
-    echo -e "\n$CNT 开始安装基本系统..."
+    # Install base system
+    echo -e "\n$CNT Installing base system..."
     pacstrap /mnt base base-devel linux linux-firmware btrfs-progs neovim networkmanager pacman-contrib
-    echo -e "\n$CAC 基本系统安装完成"
+    echo -e "\n$CAC Base system installation completed"
 
-    # 生成 fstab
-    echo -e "\n$CNT 生成 fstab..."
+    # Generate fstab
+    echo -e "\n$CNT Generating fstab..."
     genfstab -U /mnt >/mnt/etc/fstab
-    echo -e "\n$CAC fstab 生成完成"
+    echo -e "\n$CAC fstab generation completed"
 
-    # 准备 chroot
-    echo -e "\n$CNT 准备 chroot 环境..."
+    # Prepare chroot
+    echo -e "\n$CNT Preparing chroot environment..."
 
-    # 创建自检文件
+    # Create checkpoint file
     touch /mnt/root/.first_stage_completed
 
-    # 复制脚本到安装环境
+    # Copy script to installation environment
     if [ -d "$(dirname "$0")" ]; then
         cp -r "$(dirname "$0")" /mnt/root/arch-scripts
     else
@@ -148,54 +148,54 @@ EOF
 
     chmod +x /mnt/root/arch-scripts/*.sh
 
-    # 自动进入 chroot 环境并继续安装
-    echo -e "\n$CNT 自动进入 chroot 环境并继续安装..."
+    # Automatically enter chroot environment and continue installation
+    echo -e "\n$CNT Automatically entering chroot environment to continue installation..."
     arch-chroot /mnt /bin/bash -c "cd /root/arch-scripts && bash $(basename "$0")"
 
-    # 如果 chroot 执行成功
+    # If chroot execution successful
     if [ -f /mnt/root/.chroot_completed ]; then
-        echo -e "\n$COK 安装已完成，可以重启进入新系统了"
-        echo -e "\n$CAT 请执行以下命令重启系统:"
+        echo -e "\n$COK Installation completed, you can now reboot into your new system"
+        echo -e "\n$CAT Please execute the following commands to reboot:"
         echo -e "    umount -R /mnt"
         echo -e "    reboot"
     else
-        echo -e "\n$CER chroot 阶段可能未完成，请检查错误并手动完成安装"
+        echo -e "\n$CER Chroot stage may not have been completed, please check for errors and manually complete the installation"
     fi
 }
 
-# chroot 安装函数
+# Chroot installation function
 chroot_install() {
-    echo -e "\n$CNT 进入 chroot 环境，开始系统配置..."
+    echo -e "\n$CNT Entered chroot environment, beginning system configuration..."
 
-    # 更新系统
-    echo -e "\n$CNT 更新软件包数据库..."
+    # Update system
+    echo -e "\n$CNT Updating package database..."
     pacman -Syy
 
-    # 设置时区
-    echo -e "\n$CNT 设置时区..."
+    # Set timezone
+    echo -e "\n$CNT Setting timezone..."
     ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
     hwclock --systohc
-    echo -e "\n$CAC 时区设置完成"
+    echo -e "\n$CAC Timezone setup completed"
 
-    # 设置 nvim 别名
-    read -rep $'[\e[1;37mATTENTION\e[0m] - 是否添加 nvim -> vi 软链接? (y/n) ' NVIM
+    # Set nvim alias
+    read -rep $'[\e[1;37mATTENTION\e[0m] - Add nvim -> vi symlink? (y/n) ' NVIM
     if [[ $NVIM == "Y" || $NVIM == "y" ]]; then
-        echo -e "$CNT 设置 nvim 别名..."
+        echo -e "$CNT Setting nvim alias..."
         ln -sf /usr/bin/nvim /usr/bin/vi
-        echo -e "\n$CAC nvim 别名设置完成"
+        echo -e "\n$CAC nvim alias setup completed"
     fi
 
-    # 设置语言
-    echo -e "\n$CNT 设置系统语言..."
+    # Set language
+    echo -e "\n$CNT Setting system language..."
     sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
     sed -i 's/#zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/' /etc/locale.gen
     locale-gen
     echo "LANG=en_US.UTF-8" >/etc/locale.conf
-    echo -e "\n$CAC 系统语言设置完成"
+    echo -e "\n$CAC System language setup completed"
 
-    # 设置网络
-    echo -e "\n$CNT 设置网络..."
-    read -rep $'[\e[1;37mATTENTION\e[0m] - 请输入主机名 (默认: Arch): ' HOSTNAME
+    # Set network
+    echo -e "\n$CNT Setting up network..."
+    read -rep $'[\e[1;37mATTENTION\e[0m] - Please enter hostname (default: Arch): ' HOSTNAME
     HOSTNAME=${HOSTNAME:-Arch}
     echo "$HOSTNAME" >/etc/hostname
 
@@ -204,30 +204,30 @@ chroot_install() {
 ::1             localhost
 127.0.1.1       $HOSTNAME.localdomain $HOSTNAME
 EOF
-    echo -e "\n$CAC 网络设置完成"
+    echo -e "\n$CAC Network setup completed"
 
-    # 设置 initramfs
-    echo -e "\n$CNT 配置 initramfs..."
+    # Set initramfs
+    echo -e "\n$CNT Configuring initramfs..."
     sed -i '/^HOOKS=/s/.$/ systemd&/' /etc/mkinitcpio.conf
     mkinitcpio -P
-    echo -e "\n$CAC initramfs 配置完成"
+    echo -e "\n$CAC initramfs configuration completed"
 
-    # 设置 root 密码
-    echo -e "\n$CNT 设置 root 密码..."
-    read -rep $'[\e[1;37mATTENTION\e[0m] - 请输入 root 密码: ' PASSWD
+    # Set root password
+    echo -e "\n$CNT Setting root password..."
+    read -rep $'[\e[1;37mATTENTION\e[0m] - Please enter root password: ' PASSWD
     echo -e "${PASSWD}\n${PASSWD}" | passwd root
-    echo -e "\n$CAC root 密码设置完成"
+    echo -e "\n$CAC Root password setup completed"
 
-    # 设置 fstrim
-    read -rep $'[\e[1;37mATTENTION\e[0m] - 是否开启 fstrim 服务? (y/n) ' FSTRIM
+    # Set fstrim
+    read -rep $'[\e[1;37mATTENTION\e[0m] - Enable fstrim service? (y/n) ' FSTRIM
     if [[ $FSTRIM == "Y" || $FSTRIM == "y" ]]; then
-        echo -e "\n$CNT 开启 fstrim 服务..."
+        echo -e "\n$CNT Enabling fstrim service..."
         systemctl enable fstrim.timer
-        echo -e "\n$CAC fstrim 服务已开启"
+        echo -e "\n$CAC fstrim service enabled"
     fi
 
-    # 安装微码
-    echo -e "\n$CNT 安装 CPU 微码，请选择 CPU 类型..."
+    # Install microcode
+    echo -e "\n$CNT Installing CPU microcode, please select CPU type..."
     select name in "cpu-intel" "cpu-amd"; do
         case $name in
         "cpu-intel")
@@ -241,48 +241,48 @@ EOF
             break
             ;;
         *)
-            echo "输入错误，请重新输入"
+            echo "Invalid input, please try again"
             ;;
         esac
     done
-    echo -e "\n$CAC CPU 微码安装完成"
+    echo -e "\n$CAC CPU microcode installation completed"
 
-    # 安装并配置 GRUB
-    echo -e "\n$CNT 安装配置 GRUB..."
+    # Install and configure GRUB
+    echo -e "\n$CNT Installing and configuring GRUB..."
     pacman -S --noconfirm grub efibootmgr
 
-    read -rep $'[\e[1;37mATTENTION\e[0m] - 是否探测其他操作系统? (y/n) ' PROBE
+    read -rep $'[\e[1;37mATTENTION\e[0m] - Detect other operating systems? (y/n) ' PROBE
     if [[ $PROBE == "Y" || $PROBE == "y" ]]; then
-        echo -e "$CNT 配置 OS 探测器..."
+        echo -e "$CNT Configuring OS prober..."
         sed -i 's/#GRUB_DISABLE_OS_PROBER=false/GRUB_DISABLE_OS_PROBER=false/' /etc/default/grub
         pacman -S --noconfirm os-prober
-        echo -e "\n$CAC OS 探测器配置完成"
+        echo -e "\n$CAC OS prober configuration completed"
     fi
 
-    # 优化 GRUB 配置
+    # Optimize GRUB configuration
     sed -i '/GRUB_CMDLINE_LINUX_DEFAULT=/c\GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3"' /etc/default/grub
     sed -i 's/GRUB_GFXMODE=auto/GRUB_GFXMODE=1280x1024/' /etc/default/grub
 
-    # 安装 GRUB
+    # Install GRUB
     grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=Arch --boot-directory=/efi
     grub-mkconfig -o /efi/grub/grub.cfg
-    echo -e "\n$CAC GRUB 安装配置完成"
+    echo -e "\n$CAC GRUB installation and configuration completed"
 
-    # 启用网络服务
-    echo -e "\n$CNT 启用网络服务..."
+    # Enable network service
+    echo -e "\n$CNT Enabling network service..."
     systemctl enable NetworkManager
-    echo -e "\n$CAC 网络服务已启用"
+    echo -e "\n$CAC Network service enabled"
 
-    # 标记 chroot 安装完成
+    # Mark chroot installation as completed
     touch /root/.chroot_completed
 
-    echo -e "\n$COK chroot 部分配置完成! 即将继续执行用户配置脚本..."
+    echo -e "\n$COK Chroot configuration completed! Continuing to user configuration script..."
 
-    # 自动执行用户配置脚本
+    # Automatically execute user configuration script
     bash /root/arch-scripts/user-configure-script.sh
 }
 
-# 根据环境执行不同的安装函数
+# Execute different installation functions based on environment
 if [ $IN_CHROOT -eq 1 ]; then
     chroot_install
 elif [ -f /root/.first_stage_completed ]; then
