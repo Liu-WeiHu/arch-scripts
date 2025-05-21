@@ -52,7 +52,8 @@ main_install() {
     mkfs.fat -F32 /dev/$PARTITION_EFI
     echo -e "\n$CAC EFI partition formatting completed"
 
-    read -rep $'[\e[1;37mATTENTION\e[0m] - Do you need RAID configuration (not needed for single disk)? (y/n) ' USE_RAID
+    read -rep $'[\e[1;37mATTENTION\e[0m] - Do you need RAID configuration (not needed for single disk (default: n) )? (y/n) ' USE_RAID
+    USE_RAID=${USE_RAID:-n}
     if [[ $USE_RAID == "Y" || $USE_RAID == "y" ]]; then
         read -rep $'Please enter RAID parameters (e.g.: -d raid0 -m raid1): ' RAID_PARAMS
         mkfs.btrfs -f -L "MyArch" --checksum xxhash $RAID_PARAMS /dev/$PARTITION_ROOT
@@ -70,7 +71,8 @@ main_install() {
     btrfs sub create /mnt/@log
     btrfs sub create /mnt/@swap
 
-    read -rep $'[\e[1;37mATTENTION\e[0m] - Create separate home subvolume? (y/n) ' CREATE_HOME
+    read -rep $'[\e[1;37mATTENTION\e[0m] - Create separate home subvolume (default: n)? (y/n) ' CREATE_HOME
+    CREATE_HOME=${CREATE_HOME:-n}
     if [[ $CREATE_HOME == "Y" || $CREATE_HOME == "y" ]]; then
         btrfs sub create /mnt/@home
         MOUNT_HOME=1
@@ -178,7 +180,8 @@ chroot_install() {
     echo -e "\n$CAC Timezone setup completed"
 
     # Set nvim alias
-    read -rep $'[\e[1;37mATTENTION\e[0m] - Add nvim -> vi symlink? (y/n) ' NVIM
+    read -rep $'[\e[1;37mATTENTION\e[0m] - Add nvim -> vi symlink (default: y)? (y/n) ' NVIM
+    NVIM=${NVIM:-y}
     if [[ $NVIM == "Y" || $NVIM == "y" ]]; then
         echo -e "$CNT Setting nvim alias..."
         ln -sf /usr/bin/nvim /usr/bin/vi
@@ -219,12 +222,9 @@ EOF
     echo -e "\n$CAC Root password setup completed"
 
     # Set fstrim
-    read -rep $'[\e[1;37mATTENTION\e[0m] - Enable fstrim service? (y/n) ' FSTRIM
-    if [[ $FSTRIM == "Y" || $FSTRIM == "y" ]]; then
-        echo -e "\n$CNT Enabling fstrim service..."
-        systemctl enable fstrim.timer
-        echo -e "\n$CAC fstrim service enabled"
-    fi
+    echo -e "\n$CNT Enabling fstrim service..."
+    systemctl enable fstrim.timer
+    echo -e "\n$CAC fstrim service enabled"
 
     # Install microcode
     echo -e "\n$CNT Installing CPU microcode, please select CPU type..."
@@ -251,7 +251,8 @@ EOF
     echo -e "\n$CNT Installing and configuring GRUB..."
     pacman -S --noconfirm grub efibootmgr
 
-    read -rep $'[\e[1;37mATTENTION\e[0m] - Detect other operating systems? (y/n) ' PROBE
+    read -rep $'[\e[1;37mATTENTION\e[0m] - Detect other operating systems (default: n)? (y/n) ' PROBE
+    PROBE=${PROBE:-n}
     if [[ $PROBE == "Y" || $PROBE == "y" ]]; then
         echo -e "$CNT Configuring OS prober..."
         sed -i 's/#GRUB_DISABLE_OS_PROBER=false/GRUB_DISABLE_OS_PROBER=false/' /etc/default/grub

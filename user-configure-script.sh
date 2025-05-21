@@ -46,7 +46,8 @@ pacman-key --lsign-key "farseerfc@archlinux.org" || true
 pacman -S --noconfirm archlinuxcn-keyring || true
 
 # If key installation fails, reinitialize keys
-read -rep $'[\e[1;37mATTENTION\e[0m] - Was ArchlinuxCn key installation successful? (y/n) ' KEY
+read -rep $'[\e[1;37mATTENTION\e[0m] - Was ArchlinuxCn key installation successful (default: y)? (y/n) ' KEY
+KEY=${KEY:-y}
 if [[ $KEY == "N" || $KEY == "n" ]]; then
     echo -e "$CNT Reinitializing keys..."
     rm -rf /etc/pacman.d/gnupg
@@ -87,6 +88,7 @@ echo -e "\n$CAC pipewire installation completed"
 echo -e "\n$CNT Installing integrated graphics drivers..."
 pacman -S --noconfirm mesa libva-utils vulkan-icd-loader vulkan-tools
 
+echo -e "\n$CNT Please select your video card type, nvidia is not in the script...."
 select graphics in "cpu-intel" "cpu-amd"; do
     case $graphics in
     "cpu-intel")
