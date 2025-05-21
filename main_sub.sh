@@ -172,10 +172,5 @@ df -h
 echo -e "\nPartition status:"
 lsblk
 
-echo -e "\n$CAT You have successfully installed Arch Linux, please use the following commands to reboot:"
-echo -e "    exit"
-echo -e "    umount -R /mnt"
-echo -e "    reboot"
-
 # Mark user configuration as completed
 touch /root/.user_setup_completed
