@@ -280,7 +280,7 @@ EOF
     echo -e "\n$COK Chroot configuration completed! Continuing to user configuration script..."
 
     # Automatically execute user configuration script
-    bash /root/arch-scripts/user-configure-script.sh
+    bash /root/arch-scripts/main_sub.sh
 }
 
 # Execute different installation functions based on environment
