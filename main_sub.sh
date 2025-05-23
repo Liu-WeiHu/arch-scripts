@@ -14,17 +14,6 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
-# Check network connection
-echo -e "\n$CNT Checking network connection..."
-ping -c 3 www.baidu.com >/dev/null
-if [ $? -eq 0 ]; then
-    echo -e "\n$COK Network connected"
-else
-    echo -e "\n$CER Network not connected, please connect to the network before running this script!"
-    echo -e "    Tip: You can use nmtui or nmcli to configure network connection"
-    exit 1
-fi
-
 # Configure pacman
 echo -e "\n$CNT Configuring pacman..."
 sed -i 's/#Color/Color/' /etc/pacman.conf
