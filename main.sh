@@ -67,9 +67,9 @@ main_install() {
     mount /dev/$PARTITION_ROOT /mnt
 
     btrfs sub create /mnt/@
-    btrfs sub create /mnt/@cache
-    btrfs sub create /mnt/@log
-    btrfs sub create /mnt/@swap
+    btrfs sub create /mnt/@cache && chattr +C /mnt/@cache
+    btrfs sub create /mnt/@log && chattr +C /mnt/@log
+    btrfs sub create /mnt/@swap && chattr +C /mnt/@swap
 
     read -rep $'[\e[1;37mATTENTION\e[0m] - Create separate home subvolume (default: n)? (y/n) ' CREATE_HOME
     CREATE_HOME=${CREATE_HOME:-n}
